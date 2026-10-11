@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Andrianne Beniahan | Virtual Assistant, Tech &amp; Admin Support</title>
+  <meta name="description" content="Part-time remote virtual assistant who handles the admin work and fixes the tech problems around it: spreadsheets, documents, research, Python scripts and website edits.">
+
+  <!-- Link preview (Open Graph). The og:image / og:url addresses must be ABSOLUTE.
+       They assume the live address https://andrianne-beniahan.vercel.app. If Vercel gives you a different
+       address, change it in the three places below (og:url, og:image, twitter:image). -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Andrianne Beniahan | Virtual Assistant, Tech &amp; Admin Support">
+  <meta property="og:description" content="I handle the admin work, and I can fix the tech problems around it.">
+  <meta property="og:url" content="https://andrianne-beniahan.vercel.app/">
+  <meta property="og:image" content="https://andrianne-beniahan.vercel.app/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Andrianne Beniahan, Virtual Assistant, Tech &amp; Admin Support">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://andrianne-beniahan.vercel.app/assets/og-image.png">
+
+  <!-- Lets the CSS know JavaScript is running (used by the mobile menu).
+       Also starts the hero typing intro unless the visitor prefers reduced motion or opened a section link.
+       script.js ends the intro; the timer below is only a safety net. -->
+  <script>
+    document.documentElement.classList.add('js');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && (!location.hash || location.hash === '#top')) {
+      document.documentElement.classList.add('typing');
+      setTimeout(function () { document.documentElement.classList.remove('typing'); }, 7000);
+    }
+  </script>
+
+  <!-- Fonts: Anton (big headlines), Inter (text), Allura (script accents, large sizes only) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Allura&amp;family=Anton&amp;family=Inter:wght@400..800&amp;display=swap" rel="stylesheet">
+
+  <!-- Favicon: favicon.svg and apple-touch-icon.png sit next to index.html -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body id="top">
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ========== NAVIGATION (fixed to the top) ========== -->
+  <header class="site-header">
+    <!-- Scroll-progress line (script.js fills it) -->
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <nav class="nav container" aria-label="Main">
+      <a class="nav__brand" href="#top">Andrianne Beniahan</a>
+
+      <!-- Mobile menu button. script.js toggles it. -->
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+        <span class="nav__toggle-label">Menu</span>
+      </button>
+
+      <ul class="nav__menu" id="nav-menu">
+        <li><a class="nav__link" href="#about">About</a></li>
+        <li><a class="nav__link" href="#services">Services</a></li>
+        <li><a class="nav__link" href="#projects">Projects</a></li>
+        <li><a class="nav__link" href="#availability">Availability</a></li>
+        <li><a class="btn btn--primary btn--small" href="#contact" data-scramble>Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ========== HERO (dark) ========== -->
+    <section class="hero lane--dark has-dots" id="top" data-glow aria-labelledby="hero-title">
+      <div class="hero__inner container">
+
+        <div class="hero__text">
+          <!-- Decorative script greeting (hidden from screen readers) -->
+          <p class="hero__hello" aria-hidden="true">Hi, I'm Andrianne</p>
+
+          <!-- The visually hidden " | " keeps the full headline readable by screen readers and search engines -->
+          <h1 class="hero__title" id="hero-title">
+            <span class="hero__title-role">Virtual Assistant</span>
+            <span class="visually-hidden"> | </span>
+            <span class="hero__title-focus">Tech &amp; Admin Support</span>
+          </h1>
+
+          <p class="hero__pitch">I handle the admin work, and I can fix the tech problems around it.</p>
+
+          <div class="hero__actions">
+            <a class="btn btn--outline" href="assets/Andrianne-Beniahan-Resume.pdf" download data-scramble>Download Resume</a>
+            <a class="btn btn--outline" href="#projects" data-scramble>View Projects</a>
+            <a class="btn btn--primary" href="#contact" data-scramble>Contact Me</a>
+          </div>
+        </div>
+
+        <div class="hero__visual">
+          <!-- YOUR PHOTO: assets/hero-photo.png (portrait on a white background, 800 x 1000). Keep the same file name and re-run optimize-images.py to refresh the .webp copy. -->
+          <figure class="hero__photo">
+            <picture><source srcset="assets/hero-photo.webp" type="image/webp"><img src="assets/hero-photo.png" alt="Portrait of Andrianne Beniahan" width="800" height="1000" fetchpriority="high"></picture>
+          </figure>
+
+          <!-- Spinning badge (decorative) -->
+          <svg class="badge" viewBox="0 0 120 120" aria-hidden="true">
+            <defs><path id="ring" d="M60 60m-46 0a46 46 0 1 1 92 0a46 46 0 1 1-92 0"/></defs>
+            <circle cx="60" cy="60" r="58" fill="#10131A"/>
+            <text class="badge__text"><textPath href="#ring" textLength="284" lengthAdjust="spacing">TECH + ADMIN • TECH + ADMIN • </textPath></text>
+            <circle cx="60" cy="60" r="7" fill="#AFC0FF"/>
+          </svg>
+
+          <!-- Draggable stickers (decorative, mouse and touch). Edit the words or add more. -->
+          <span class="sticker" style="--r:-5deg; left:-4%; top:2%;" aria-hidden="true">Async-friendly</span>
+          <span class="sticker sticker--blue" style="--r:5deg; right:-4%; top:58%;" aria-hidden="true">Tech Literate</span>
+          <span class="sticker" style="--r:-3deg; left:-4%; bottom:15%;" aria-hidden="true">Online 3 PM–2 AM PHT</span>
+          <span class="sticker sticker--blue" style="--r:4deg; right:-3%; bottom:3%;" aria-hidden="true">Quick Learner</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========== SKILLS STRIP (decorative scrolling band; the second list is a copy for the loop) ========== -->
+    <div class="ticker" aria-label="Skills and tools">
+      <div class="ticker__track">
+        <ul class="ticker__list"><li>HTML/CSS/JS</li><li>Python</li><li>Java</li><li>SQL</li><li>Git/GitHub</li><li>Vercel</li><li>Google Colab</li><li>MS Office</li><li>AI tools &amp; prompting</li></ul>
+        <ul class="ticker__list" aria-hidden="true"><li>HTML/CSS/JS</li><li>Python</li><li>Java</li><li>SQL</li><li>Git/GitHub</li><li>Vercel</li><li>Google Colab</li><li>MS Office</li><li>AI tools &amp; prompting</li></ul>
+      </div>
+    </div>
+
+    <!-- ========== ABOUT (light) ========== -->
+    <section class="lane lane--light" id="about" aria-labelledby="about-title">
+      <div class="container">
+        <h2 class="title reveal" id="about-title">About me</h2>
+        <p class="lead reveal">I'm Andrianne, a third-year Computer Science student in the Philippines. I like work that's done right: I check the details, keep things organized, and don't leave loose ends. I'm comfortable with tech, so when a spreadsheet breaks, a script is needed or a website needs a fix, I can handle it myself instead of passing it along. And I'm easy to work with: clear updates and no surprises.</p>
+        <ul class="chips chips--big reveal"><li class="chip" data-drag>Detail-oriented</li><li class="chip" data-drag>Tech-literate</li><li class="chip" data-drag>Easy to work with</li></ul>
+      </div>
+    </section>
+
+    <!-- ========== SERVICES: two lanes. Admin = light, Tech = dark ========== -->
+    <section id="services" aria-label="Services">
+
+      <div class="lane lane--light lane--rule" aria-labelledby="admin-title">
+        <div class="container">
+          <h2 class="title reveal" id="admin-title">Admin support</h2>
+          <ul class="grid grid--3">
+            <li class="card reveal"><h3 class="card__title">Data entry &amp; spreadsheet cleanup</h3><p class="card__text">Accurate data entry, and messy Excel sheets turned into tidy ones.</p></li>
+            <li class="card reveal"><h3 class="card__title">Word documents &amp; file organization</h3><p class="card__text">Clean, consistent documents and folders you can actually find things in.</p></li>
+            <li class="card reveal"><h3 class="card__title">Online research &amp; summaries</h3><p class="card__text">I look things up and send back short summaries you can use.</p></li>
+            <li class="card reveal"><h3 class="card__title">Clear English communication</h3><p class="card__text">Fluent written and spoken English for emails, messages and updates.</p></li>
+            <li class="card reveal"><h3 class="card__title">Organized &amp; detail-focused</h3><p class="card__text">I keep track of tasks and files, and check my work before I send it back.</p></li>
+            <li class="card reveal"><h3 class="card__title">Everyday VA tools</h3><p class="card__text">I pick up the tools VA work runs on quickly, from spreadsheets and documents to AI assistants.</p><ul class="chips"><li class="chip">Excel</li><li class="chip">MS Office</li><li class="chip">AI tools</li></ul></li>
+              <li class="card card--wide reveal" style="grid-column: 1 / -1;">
+              <div><h3 class="card__title">70 WPM typing</h3><p class="card__text">Fast, steady typing for data entry, documents and transcribing notes.</p></div>
+              <figure><picture><source srcset="assets/typing-test.webp" type="image/webp"><img src="assets/typing-test.png" alt="Typing test result: 70 words per minute with 98% accuracy" width="1600" height="612" loading="lazy"></picture><figcaption>My typing test result.</figcaption></figure>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="lane lane--dark has-dots" data-glow aria-labelledby="tech-title">
+        <div class="container">
+          <h2 class="title reveal" id="tech-title">Tech &amp; automation</h2>
+          <ul class="grid grid--3">
+            <li class="card reveal"><h3 class="card__title">Python automation scripts</h3><p class="card__text">Simple scripts that take repetitive tasks off your list.</p><ul class="chips"><li class="chip">Python</li><li class="chip">Google Colab</li></ul></li>
+            <li class="card reveal"><h3 class="card__title">Website edits</h3><p class="card__text">Fixes and updates to a site's HTML, CSS and JavaScript.</p><ul class="chips"><li class="chip">HTML</li><li class="chip">CSS</li><li class="chip">JavaScript</li></ul></li>
+            <li class="card reveal"><h3 class="card__title">Data cleaning &amp; basic SQL</h3><p class="card__text">Tidy up messy data, then pull answers out of it.</p><ul class="chips"><li class="chip">SQL</li><li class="chip">Excel</li></ul></li>
+            <li class="card reveal"><h3 class="card__title">AI-assisted workflows</h3><p class="card__text">Faster drafts, research and planning, with a human check at the end.</p><ul class="chips"><li class="chip">AI tools</li><li class="chip">Prompting</li></ul></li>
+            <li class="card reveal"><h3 class="card__title">Site deployment &amp; hosting</h3><p class="card__text">Get a website online and keep it updated.</p><ul class="chips"><li class="chip">GitHub</li><li class="chip">Vercel</li></ul></li>
+            <li class="card reveal"><h3 class="card__title">Tool setup &amp; troubleshooting</h3><p class="card__text">Get new tools set up, track down what's broken and fix it, or tell you clearly what's needed.</p><ul class="chips"><li class="chip">Troubleshooting</li><li class="chip">MS Office</li></ul></li>
+          </ul>
+          <p class="small reveal">Also open to: email and inbox organization, calendar and scheduling support, and customer support.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== HOW I USE AI (light, flip cards) ========== -->
+    <section class="lane lane--light" id="ai" aria-labelledby="ai-title">
+      <div class="container">
+        <h2 class="title reveal" id="ai-title">How I use AI</h2>
+        <p class="lead reveal">I use AI to work faster. I check everything before delivering.</p>
+        <ul class="grid grid--4">
+          <li class="reveal"><button class="flip" type="button" aria-pressed="false"><span class="flip__inner">
+            <span class="flip__face flip__front"><span class="flip__title">Research &amp; summaries</span>Turn a pile of sources into a short, usable summary.<span class="flip__hint">Tap to flip</span></span>
+            <span class="flip__face flip__back" aria-hidden="true"><span class="flip__title">What I do</span>I use AI tools to gather and condense information, then verify the details myself.<span class="flip__hint">Checked before delivery.</span></span></span></button></li>
+          <li class="reveal"><button class="flip" type="button" aria-pressed="false"><span class="flip__inner">
+            <span class="flip__face flip__front"><span class="flip__title">Turning ideas into working projects</span>Describe it, build it, test it.<span class="flip__hint">Tap to flip</span></span>
+            <span class="flip__face flip__back" aria-hidden="true"><span class="flip__title">What I do</span>I use AI tools to help build small tools and web pages, then test them until they work.<span class="flip__hint">Checked before delivery.</span></span></span></button></li>
+          <li class="reveal"><button class="flip" type="button" aria-pressed="false"><span class="flip__inner">
+            <span class="flip__face flip__front"><span class="flip__title">Presentations</span>Rough notes in, clear slides out.<span class="flip__hint">Tap to flip</span></span>
+            <span class="flip__face flip__back" aria-hidden="true"><span class="flip__title">What I do</span>I use AI to draft the structure and wording, then edit for clarity and consistency.<span class="flip__hint">Checked before delivery.</span></span></span></button></li>
+          <li class="reveal"><button class="flip" type="button" aria-pressed="false"><span class="flip__inner">
+            <span class="flip__face flip__front"><span class="flip__title">Planning &amp; brainstorming</span>Think it through before doing it.<span class="flip__hint">Tap to flip</span></span>
+            <span class="flip__face flip__back" aria-hidden="true"><span class="flip__title">What I do</span>I use AI to map out steps and options, then choose the plan that fits and write it down.<span class="flip__hint">Checked before delivery.</span></span></span></button></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========== PROJECTS (dark): coverflow carousel ==========
+         ADD A NEW PROJECT: copy everything from "PROJECT START" to "PROJECT END" below and paste it
+         right before </ul> (after the last PROJECT END). Edit the text, chips and links in both parts:
+         the small card (what shows in the carousel) and the details (what opens when you click it).
+         The dots, the numbers (01, 02...) and the arrows update by themselves. -->
+    <section class="lane lane--dark has-dots" id="projects" data-glow aria-labelledby="projects-title">
+      <div class="container">
+        <h2 class="title reveal" id="projects-title">Projects</h2>
+        <div class="carousel reveal" data-carousel role="region" aria-roledescription="carousel" aria-label="Project carousel">
+          <ul class="carousel__track">
+
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Web Scrapbook / Front-End Showcase</span>
+                <span class="slide__summary">A responsive front-end project built to show layout and deployment skills.</span>
+                <span class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span><span class="chip">Vercel</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Web Scrapbook / Front-End Showcase</h3>
+                <p class="card__text">A responsive front-end project built to show layout and deployment skills.</p>
+                <ul class="chips"><li class="chip">HTML</li><li class="chip">CSS</li><li class="chip">JavaScript</li><li class="chip">Vercel</li></ul>
+                <p class="project__actions"><a class="btn btn--primary btn--small" href="https://web-scrapbook.vercel.app/" target="_blank" rel="noopener">View live site</a></p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Image Scraper</span>
+                <span class="slide__summary">Collects images from Baidu by keyword. Test run: 48 of 50 images in about 2 minutes.</span>
+                <span class="chips"><span class="chip">Python</span><span class="chip">Google Colab</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Image Scraper</h3>
+                <p class="card__text">A Python script in Google Colab that collects images from Baidu by keyword.</p>
+                <ul class="stats"><li>48 of 50 images</li><li>about 2 minutes</li><li>est. 30–60 min by hand</li></ul>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>Collecting images by hand means searching, saving and sorting them one at a time. I estimate 30–60 minutes for a batch.</dd></div>
+                  <div><dt>Approach</dt><dd>I type a keyword and a target number (5 to 50 or more). The script searches Baidu and saves the images to a folder.</dd></div>
+                  <div><dt>Result</dt><dd>A test run for "fish" finished in about 2 minutes and returned 48 of the 50 I asked for. So the number is a target, not a guarantee, and Baidu is the only source.</dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Python</li><li class="chip">Google Colab</li></ul>
+                <figure><picture><source srcset="assets/scraper-output.webp" type="image/webp"><img src="assets/scraper-output.png" alt="Output folder from the test run containing 48 downloaded fish images" width="1600" height="1041" loading="lazy"></picture><figcaption>Output folder from the test run.</figcaption></figure>
+                <p class="project__actions"><a class="btn btn--outline btn--small" href="https://github.com/awbeniahan/image-scraper" target="_blank" rel="noopener">View code</a></p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Habit Tracker</span>
+                <span class="slide__summary">A dark, minimalist habit tracker that works offline on a phone. Heat maps, streaks and photo proof, no account needed.</span>
+                <span class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span><span class="chip">Offline web app</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Habit Tracker</h3>
+                <p class="card__text">A personal habit tracker that works offline on a phone. Every habit gets a heat map, and a photo can be attached as proof when it is completed.</p>
+                <ul class="stats"><li>Works offline</li><li>No account or server</li><li>Data stays on the device</li></ul>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>I wanted a simple way to stay consistent with my own habits, without signing up for another service.</dd></div>
+                  <div><dt>Approach</dt><dd>Plain HTML, CSS and JavaScript, no libraries. Each habit gets a GitHub-style heat map. The app also has three views, streak badges, a stats screen and rest days, and it saves its own files so it opens without internet.</dd></div>
+                  <div><dt>Result</dt><dd>A working app I use on my own phone, and it can be added to the home screen. Everything is stored on the device, with backup and restore to a file.</dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">HTML</li><li class="chip">CSS</li><li class="chip">JavaScript</li><li class="chip">Offline web app</li></ul>
+                <!-- The demo link loads sample habits (?demo=1), so visitors do not see an empty app. -->
+                <p class="project__actions"><a class="btn btn--primary btn--small" href="https://awbeniahan.github.io/habit-tracker/?demo=1" target="_blank" rel="noopener">View live demo</a> <a class="btn btn--outline btn--small" href="https://github.com/awbeniahan/habit-tracker" target="_blank" rel="noopener">View code</a></p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
+          </ul>
+        </div>
+
+        <!-- Details window. script.js copies the clicked project's details into it. -->
+        <dialog class="project-dialog" id="project-dialog">
+          <div class="project-dialog__inner">
+            <button class="btn btn--primary btn--small project-dialog__close" type="button">Close</button>
+            <div id="project-dialog-body"></div>
+          </div>
+        </dialog>
+      </div>
+    </section>
+
+    <!-- ========== SKILLS & TOOLS (dark) ========== -->
+    <section class="lane lane--dark lane--rule" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <h2 class="title reveal" id="skills-title">Skills &amp; tools</h2>
+        <div class="skillgroup reveal">
+          <h3 class="skillgroup__title">Tools</h3>
+          <ul class="chips chips--big"><li class="chip">HTML/CSS/JS</li><li class="chip">Python</li><li class="chip">Java</li><li class="chip">SQL</li><li class="chip">Git/GitHub</li><li class="chip">Vercel</li><li class="chip">Google Colab</li><li class="chip">MS Office</li><li class="chip">AI tools &amp; prompting</li></ul>
+        </div>
+        <div class="skillgroup reveal">
+          <h3 class="skillgroup__title">Working skills</h3>
+          <ul class="chips chips--big"><li class="chip">Written &amp; spoken English</li><li class="chip">Communication</li><li class="chip">Organization</li><li class="chip">Attention to detail</li><li class="chip">Problem-solving</li><li class="chip">Quick learner</li><li class="chip">Reporting back</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== AVAILABILITY (light) ========== -->
+    <section class="lane lane--light" id="availability" aria-labelledby="avail-title">
+      <div class="container">
+        <h2 class="title reveal" id="avail-title">Availability</h2>
+        <!-- Live clock: script.js fills it in and shows it (hidden until then) -->
+        <p class="clock reveal" id="clock" hidden><span class="clock__dot" aria-hidden="true"></span><strong id="ph-time"></strong><span class="clock__text">Philippine time · <span id="ph-status"></span> · Your time <span id="local-time"></span></span></p>
+        <ul class="avail">
+          <li class="card reveal"><h3 class="card__title">Hours</h3><p class="card__text">Part-time, about 3-5 hrs/day.</p></li>
+          <li class="card reveal"><h3 class="card__title">Time zone</h3><p class="card__text">Available 3 PM to 2 AM Philippine time (best finished by midnight), which covers UK/Europe business hours and US East Coast mornings.</p></li>
+        </ul>
+        <h3 class="subtitle reveal" id="how-title">How I work</h3>
+        <ol class="steps reveal" aria-labelledby="how-title">
+          <li class="step"><span class="step__num" aria-hidden="true">01</span><strong class="step__title">You send the task</strong><span class="step__text">Tell me what you need and when it's due. A short written brief is enough.</span></li>
+          <li class="step"><span class="step__num" aria-hidden="true">02</span><strong class="step__title">I work through it</strong><span class="step__text">I get on with it during my hours (3 PM to 2 AM Philippine time), on my own schedule within your deadline.</span></li>
+          <li class="step"><span class="step__num" aria-hidden="true">03</span><strong class="step__title">I check it, then report back</strong><span class="step__text">I check everything before delivering, then let you know it's done.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ========== CONTACT (dark) ========== -->
+    <section class="lane lane--dark has-dots contact" id="contact" data-glow aria-labelledby="contact-title">
+      <div class="container contact__layout">
+        <div class="contact__text">
+        <h2 class="title reveal" id="contact-title">Let's work together</h2>
+        <p class="contact__lead reveal">Send me the task and the deadline, and I'll take it from there.</p>
+        <p class="reveal"><a class="btn btn--primary btn--xl" href="mailto:beniahan321@gmail.com" data-scramble>beniahan321@gmail.com</a></p>
+        <ul class="links reveal" aria-label="Other places to find me">
+          <li><a href="https://www.linkedin.com/in/awbeniahan" target="_blank" rel="noopener">linkedin.com/in/awbeniahan</a></li>
+          <li><a href="https://www.onlinejobs.ph/jobseekers/info/5371630" target="_blank" rel="noopener">OnlineJobs.ph profile</a></li>
+        </ul>
+        </div>
+        <!-- Decorative globe (script.js draws it; drag to spin). Hidden when JavaScript is off. -->
+        <div class="globe reveal" aria-hidden="true"><canvas></canvas></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer"><div class="container site-footer__row"><span>© 2026 Andrianne Beniahan</span><a class="site-footer__top" href="#top">Back to top <span aria-hidden="true">↑</span></a></div></footer>
+
+</body>
+</html>

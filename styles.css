@@ -1,0 +1,743 @@
+/* ==========================================================================
+   1. DESIGN TOKENS
+   Two lanes: DARK (hero, tech) and LIGHT (admin). One blue accent, two shades.
+   Contrast ratios (WCAG AA needs 4.5:1 for text) are noted next to each pair.
+   ========================================================================== */
+/* Stand-in fonts sized to match Anton and Inter, so text barely moves when the web fonts arrive */
+@font-face { font-family: "Inter Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"); size-adjust: 108.13%; ascent-override: 89.59%; descent-override: 22.31%; line-gap-override: 0%; }
+@font-face { font-family: "Anton Fallback"; src: local("Arial"), local("Helvetica"), local("Liberation Sans"); size-adjust: 68.18%; ascent-override: 172.52%; descent-override: 48.27%; line-gap-override: 0%; }
+
+:root {
+  /* Dark lane: near-black with deep blue accents */
+  --ink: #0B0B0D;               /* dark background */
+  --ink-raised: #16171C;        /* cards on dark */
+  --line-dark: #2A2C35;         /* borders on dark (not text) */
+  --text-on-dark: #F4F5F7;      /* on --ink: about 18:1 */
+  --muted-on-dark: #B9BCC6;     /* on --ink: about 10:1 */
+  --blue-royal: #1B38B5;        /* SURFACES (buttons, photo block, bands). White text on it: about 9:1 */
+  --blue-royal-hover: #2A4BCB;  /* white text on it: about 7:1 */
+  --blue-tint: #8FA6FF;         /* small TEXT and lines on dark. On --ink: about 8.5:1 */
+
+  /* Light lane (used by the Admin sections in the next step) */
+  --paper: #F5F6F8;             /* light background */
+  --text-on-light: #1A1F2B;     /* on --paper: about 15:1 */
+  --muted-on-light: #4A5263;    /* on --paper: about 7.3:1 */
+  --blue-deep: #1A37B8;         /* accent on light. On --paper: about 8.5:1 */
+
+  /* Type: Anton for big headlines, Inter for text, Allura for large script accents only */
+  --font-display: "Anton", "Anton Fallback", "Arial Narrow", Impact, sans-serif;
+  --font: "Inter", "Inter Fallback", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-script: "Allura", "Snell Roundhand", cursive;
+  --text-base: 1.0625rem;
+  --text-lead: clamp(1.15rem, 1.05rem + 0.6vw, 1.4rem);
+  --text-display: clamp(3.5rem, 2rem + 8vw, 8rem);
+
+  /* Layout */
+  --gutter: clamp(1.25rem, 5vw, 2.5rem);
+  --max-width: 72rem;
+  --header-h: 4.25rem;
+}
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);   /* anchor links stop below the fixed header */
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--text-on-light);
+  background: var(--paper);
+}
+
+img { max-width: 100%; height: auto; }
+
+:focus-visible {
+  outline: 3px solid var(--focus, var(--blue-tint));   /* --focus is set per lane: deep blue on light, tint on dark */
+  outline-offset: 3px;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: 0.5rem;
+  z-index: 400;
+  padding: 0.6rem 1rem;
+  background: var(--blue-royal);
+  color: var(--text-on-dark);
+  font-weight: 700;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+
+/* ==========================================================================
+   3. BUTTONS (tactile: hard shadow that presses down on click)
+   .btn--primary: filled blue, dark text (about 6.8:1)
+   .btn--outline: light outline for dark backgrounds
+   data-scramble (set in HTML) makes script.js scramble the label briefly on hover.
+   ========================================================================== */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;                     /* comfortable tap target */
+  white-space: nowrap;
+  padding: 0.6rem 1.4rem;
+  border: 2px solid transparent;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, background-color 0.15s, color 0.15s;
+}
+.btn--primary:hover { background: var(--blue-royal-hover); }
+.btn--primary { background: var(--blue-royal); color: var(--text-on-dark); box-shadow: 4px 4px 0 var(--text-on-dark); }
+.btn--outline { background: transparent; border-color: var(--text-on-dark); color: var(--text-on-dark); box-shadow: 4px 4px 0 var(--blue-royal); }
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--text-on-dark); }
+.btn--outline:hover { box-shadow: 6px 6px 0 var(--blue-royal); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 transparent; }
+.btn--small { min-height: 2.75rem; padding: 0.4rem 1.1rem; }
+
+
+/* ==========================================================================
+   4. NAVIGATION (always dark, fixed to the top of the window)
+   Mobile: brand + Menu button, links drop down.
+   Desktop (56rem+): links sit in a row.
+   Without JavaScript the links just stay visible.
+   ========================================================================== */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--ink);
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--header-h);
+}
+
+.nav__brand {
+  display: inline-flex; align-items: center; min-height: 2.75rem;   /* 44 px tap target */
+  color: var(--text-on-dark);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.nav__toggle {
+  display: none;                        /* only shown when JS is running */
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  background: none;
+  border: 2px solid var(--line-dark);
+  color: var(--text-on-dark);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.js .nav__toggle { display: inline-flex; align-items: center; }
+
+.nav__menu {
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem 0 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.nav__menu li:last-child { padding-top: 0.5rem; }
+
+/* With JS on mobile: the menu is a dropdown under the header */
+.js .nav__menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding-inline: var(--gutter);
+  background: var(--ink);
+  border-bottom: 1px solid var(--line-dark);
+}
+.js .nav__menu.is-open { display: flex; }
+
+.nav__link {
+  display: block;
+  padding: 0.75rem 0;
+  color: var(--muted-on-dark);          /* about 9.6:1 */
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) 0 90% / 0 2px no-repeat; /* underline that slides in */
+  transition: color 0.15s, background-size 0.2s;
+}
+.nav__link:hover { color: var(--text-on-dark); background-size: 100% 2px; }
+
+@media (min-width: 56rem) {
+  .js .nav__toggle { display: none; }
+
+  .nav__menu,
+  .js .nav__menu,
+  .js .nav__menu.is-open {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;                 /* the sliding underline is positioned inside the menu */
+    width: auto;
+    padding: 0;
+    border: 0;
+  }
+  .nav__menu li:last-child { padding: 0 0 0 0.75rem; }
+  .nav__link { padding: 0.5rem 0.75rem; }
+}
+
+/* ==========================================================================
+   5. HERO (dark)
+   Mobile: text first, photo below. Desktop: text left, photo right.
+   The cut-out photo stands on a solid blue block. Everything around the photo
+   is decorative and moves a little with the cursor (script.js sets --px / --py).
+   ========================================================================== */
+.hero {
+  color: var(--text-on-dark);
+  padding-top: var(--header-h);         /* room for the fixed header */
+  overflow: hidden;
+}
+
+.hero__inner {
+  display: grid;
+  gap: 3rem;
+  padding-block: clamp(2rem, 6vw, 4rem) clamp(3rem, 6vw, 5rem);
+}
+
+.hero__hello {                          /* script greeting, tucked into the headline */
+  position: relative;
+  z-index: 2;
+  margin: 0 0 -0.6rem;
+  font-family: var(--font-script);
+  font-size: clamp(2.5rem, 1.6rem + 3.5vw, 4rem);   /* script stays large for legibility */
+  line-height: 1;
+  color: var(--blue-tint);
+  rotate: -3deg;
+}
+
+.hero__title {
+  margin: 0 0 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 400;                     /* Anton only has one weight */
+  font-size: var(--text-display);
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.hero__title-role  { display: block; }
+.hero__title-focus {                    /* the specialty line: smaller, blue (about 6.8:1) */
+  display: block;
+  margin-top: 0.12em;
+  font-size: 0.52em;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--blue-tint);
+}
+
+.hero__pitch {
+  max-width: 34ch;
+  margin: 0;
+  font-size: var(--text-lead);
+  line-height: 1.4;
+  color: var(--muted-on-dark);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;                          /* a bit extra for the shadows and selection box */
+  margin-top: 2.25rem;
+}
+
+/* Photo area. aspect-ratio keeps the space even if the image is missing. */
+.hero__visual {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  justify-self: center;
+}
+.hero__photo {
+  position: relative;
+  margin: 0 0 1rem;                     /* room for the offset blue block */
+  aspect-ratio: 4 / 5;
+}
+.hero__photo::before {                  /* blue block offset behind the photo card */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--blue-royal);
+  /* Decorative film grain (allowed here: no text sits on this block) */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-blend-mode: soft-light;
+  translate: calc(1rem + var(--px, 0) * -14px) calc(1rem + var(--py, 0) * -10px);
+  transition: translate 0.25s ease-out;
+}
+.hero__photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  background: #fff;                     /* the photo has its own white background */
+}
+
+.badge {                                /* spinning "TECH + ADMIN" badge */
+  position: absolute;
+  top: 5%;
+  right: -1.5rem;
+  z-index: 3;
+  width: 6.5rem;
+  height: 6.5rem;
+  translate: calc(var(--px, 0) * 10px) calc(var(--py, 0) * 8px);
+  animation: spin 22s linear infinite;
+}
+.badge__text {
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 800;
+  fill: var(--text-on-dark);            /* on --ink: about 17:1 */
+}
+@keyframes spin { to { rotate: 360deg; } }
+
+.sticker {                              /* draggable chips (script.js) */
+  position: absolute;
+  z-index: 3;
+  padding: 0.45rem 0.95rem;
+  background: var(--paper);
+  color: var(--ink);                    /* about 17:1 */
+  font-weight: 800;
+  box-shadow: 4px 4px 0 var(--blue-royal);
+  rotate: var(--r, 0deg);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  white-space: nowrap;
+  transition: box-shadow 0.15s, scale 0.15s, translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);   /* springy snap back */
+}
+.sticker--blue { font-weight: 700; background: var(--blue-royal); color: var(--text-on-dark); box-shadow: 4px 4px 0 var(--paper); }
+.sticker.is-dragging { transition: box-shadow 0.15s, scale 0.15s; z-index: 4; scale: 1.1; cursor: grabbing; box-shadow: 8px 8px 0 var(--ink-raised); }
+
+@media (min-width: 56rem) {
+  .hero__inner {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 3rem;
+  }
+  .hero__visual { justify-self: end; }
+}
+
+/* ==========================================================================
+   6. LANES, TYPE, CARDS, CHIPS
+   .lane--light = Admin look, .lane--dark = Tech look. Colors come from the
+   variables each lane sets, so cards and chips restyle themselves.
+   .has-dots = faint dot grid + soft blue glow that follows the mouse (script.js sets --gx / --gy).
+   .reveal   = fades in when scrolled into view.
+   ========================================================================== */
+.lane { padding-block: clamp(4rem, 9vw, 6.5rem); }
+.lane--light { --text: var(--text-on-light); --muted: var(--muted-on-light); --card-bg: #fff; --card-line: #D5D9E3; --spot: var(--blue-deep); --focus: var(--blue-deep); --chip-bg: #E9ECF5; --chip-text: var(--blue-deep); background: var(--paper); color: var(--text); }
+.lane--dark  { --text: var(--text-on-dark); --muted: var(--muted-on-dark); --card-bg: var(--ink-raised); --card-line: var(--line-dark); --spot: var(--blue-tint); --focus: var(--blue-tint); --chip-bg: #1F2230; --chip-text: var(--text-on-dark); background-color: var(--ink); color: var(--text); }
+.has-dots {
+  background-image:
+    radial-gradient(520px circle at var(--gx, 75%) var(--gy, -20%), rgba(27, 56, 181, 0.3), transparent 65%),
+    radial-gradient(circle, #22242D 1px, transparent 1.6px);
+  background-size: auto, 26px 26px;
+}
+
+.title { margin: 0 0 2rem; font-family: var(--font-display); font-weight: 400; font-size: clamp(2.75rem, 1.8rem + 5vw, 5.5rem); line-height: 0.95; text-transform: uppercase; }
+.lead { max-width: 54ch; margin: 0 0 2.5rem; font-size: var(--text-lead); line-height: 1.45; color: var(--muted); }
+.small { margin: 2.5rem 0 0; font-size: 0.95rem; color: var(--muted); }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; margin: 0; padding: 0; list-style: none; }   /* minmax(0,..) stops long content widening the page */
+@media (min-width: 40rem) { .grid--3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 64rem) { .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 56rem) { .grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 40rem) and (max-width: 55.99rem) { .grid--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Card with a light that follows the mouse along its border (--sx / --sy set by script.js) */
+.card { position: relative; display: flex; flex-direction: column; padding: 1.5rem; background: var(--card-bg); border: 1.5px solid var(--card-line); }
+.card::before, .flip__front::before {
+  content: ""; position: absolute; inset: -1.5px; padding: 1.5px; pointer-events: none;
+  background: radial-gradient(220px circle at var(--sx, 50%) var(--sy, 50%), var(--spot), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0; transition: opacity 0.2s;
+}
+.card:hover::before, .grid--4 > li:hover .flip__front::before { opacity: 1; }
+.card__title { margin: 0 0 0.6rem; overflow-wrap: break-word; font-family: var(--font-display); font-weight: 400; font-size: 1.75rem; line-height: 1.05; text-transform: uppercase; }
+.card__text { margin: 0; color: var(--muted); }
+.card figure { margin: 1.25rem 0 0; }
+.card img { display: block; width: 100%; height: auto; border: 1.5px solid var(--card-line); }
+.card figcaption { margin-top: 0.5rem; font-size: 0.875rem; color: var(--muted); }
+.card--wide { display: grid; gap: 1.5rem; align-items: center; }
+@media (min-width: 48rem) { .card--wide { grid-template-columns: 1fr 1.2fr; } .card--wide figure { margin: 0; } }
+
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0 0; padding: 0; list-style: none; }
+.chip { padding: 0.3rem 0.8rem; border-radius: 999px; background: var(--chip-bg); color: var(--chip-text); font-size: 0.85rem; font-weight: 600; line-height: 1.3; }
+.card .chips { margin-top: auto; padding-top: 1rem; }
+.chips--big { gap: 0.75rem; margin-top: 0; }
+.chips--big .chip { padding: 0.55rem 1.2rem; font-size: 1.1rem; transition: translate 0.15s, background-color 0.15s, color 0.15s; }
+.chips--big .chip:hover { translate: 0 -3px; background: var(--blue-royal); color: var(--text-on-dark); }
+
+/* Scroll reveal */
+.js .reveal { opacity: 0; translate: 0 28px; transition: opacity 0.6s var(--d, 0s), translate 0.6s var(--d, 0s), transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.js .reveal.is-in { opacity: 1; translate: 0 0; }
+
+/* Hero load-in: one short sequence */
+@keyframes rise { from { opacity: 0; translate: 0 24px; } }
+.js .hero__hello, .js .hero__pitch, .js .hero__actions, .js .hero__visual { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards; }
+.js .hero__hello { animation-delay: 0.05s; }
+.js .hero__pitch { animation-delay: 0.35s; } .js .hero__actions { animation-delay: 0.45s; } .js .hero__visual { animation-delay: 0.3s; }
+
+/* ==========================================================================
+   7. SKILLS STRIP (slow scrolling band under the hero)
+   ========================================================================== */
+.ticker { --gap: 2rem; overflow: hidden; padding-block: 1rem; background: var(--blue-royal); color: var(--text-on-dark); }
+.ticker__track { display: flex; width: max-content; animation: scroll 38s linear infinite; }
+.ticker__list { display: flex; flex-shrink: 0; gap: var(--gap); margin: 0; padding: 0 var(--gap) 0 0; list-style: none; font-family: var(--font-display); font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem); text-transform: uppercase; line-height: 1.2; }
+.ticker__list li::after { content: "/"; margin-left: var(--gap); opacity: 0.6; }
+@keyframes scroll { to { translate: -50% 0; } }
+
+/* ==========================================================================
+   8. FLIP CARDS (How I use AI). Click, tap or press Enter to flip.
+   Without JavaScript both sides simply show, one under the other.
+   ========================================================================== */
+.grid--4 > li { display: flex; }
+.flip { display: block; width: 100%; align-self: stretch; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.flip__inner { display: block; height: 100%; }
+.flip__face { display: flex; flex-direction: column; padding: 1.5rem; }
+.flip__front { background: var(--card-bg); border: 1.5px solid var(--card-line); }
+.flip__back { background: var(--blue-deep); color: var(--text-on-dark); }   /* white on deep blue: about 9:1 */
+.flip__title { display: block; overflow-wrap: break-word; margin-bottom: 0.6rem; font-family: var(--font-display); font-size: 1.75rem; line-height: 1.05; text-transform: uppercase; }
+.flip__hint { display: block; margin-top: auto; padding-top: 1rem; font-size: 0.875rem; font-weight: 600; color: var(--muted); }
+.flip__back .flip__hint { color: var(--text-on-dark); }
+.js .flip { perspective: 1000px; }
+.js .flip__inner { display: grid; grid-template-columns: minmax(0, 1fr); height: 100%; transform-style: preserve-3d; transition: transform 0.6s; }
+.js .flip__face { grid-area: 1 / 1; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.js .flip__back { transform: rotateY(180deg); }
+.js .flip.is-flipped .flip__inner { transform: rotateY(180deg); }
+
+/* ==========================================================================
+   9. PROJECTS, AVAILABILITY, CONTACT, FOOTER
+   ========================================================================== */
+.stats { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; margin: 1rem 0 0; padding: 0; list-style: none; font-weight: 700; }
+.project__actions { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.5rem; }
+
+.avail { display: grid; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 56rem) { .avail { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); } }
+
+.contact { text-align: left; }
+.btn--xl { max-width: 100%; min-height: 4rem; padding: 0.8rem 2rem; font-size: clamp(1.05rem, 0.9rem + 1.2vw, 1.6rem); }
+.links { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; margin: 2.5rem 0 0; padding: 0; list-style: none; font-weight: 700; }
+.links a { color: var(--text-on-dark); text-underline-offset: 0.3em; }
+.links a:hover { color: var(--blue-tint); }
+
+.site-footer { padding-block: 1.5rem; background: var(--ink); border-top: 1px solid var(--line-dark); color: var(--muted-on-dark); font-size: 0.9rem; }
+
+/* ==========================================================================
+   10. NAV: underline that glides to the section you are in (script.js moves it)
+   ========================================================================== */
+.nav__indicator { display: none; }
+.nav__link[aria-current] { color: var(--text-on-dark); background-size: 100% 2px; }   /* mobile: plain underline */
+@media (min-width: 56rem) {
+  .nav__indicator { display: block; position: absolute; left: 0; top: 0; width: 0; height: 2px; background: var(--blue-tint); opacity: 0; pointer-events: none; }
+  .nav__indicator.is-ready { transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1), width 0.4s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.25s; }
+  .nav__link[aria-current], .nav__link[aria-current]:hover { background-size: 0 2px; }  /* the gliding bar replaces it */
+}
+
+/* ==========================================================================
+   11. TITLE LETTERS: hover = dashed outline + selection frame, drag = spring back
+   script.js splits big titles into .word > .ch (one span per letter).
+   ========================================================================== */
+.title, .hero__title { position: relative; }
+.word { display: inline-block; white-space: nowrap; }
+.ch { display: inline-block; cursor: grab; user-select: none; transition: translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.ch.is-dragging { position: relative; z-index: 3; cursor: grabbing; transition: none; }
+.ch.is-outline {                        /* fill removed, outline kept; the mask breaks the line into dashes */
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 2px currentColor;
+  -webkit-mask-image: repeating-linear-gradient(135deg, #000 0 6px, transparent 6px 9px);
+  mask-image: repeating-linear-gradient(135deg, #000 0 6px, transparent 6px 9px);
+}
+.lane--dark .ch.is-outline { -webkit-text-stroke-color: #fff; }   /* white outline on dark sections */
+.hero__title .glyph-frame__label { display: none; }               /* no size numbers on the stacked hero title */
+.glyph-frame {                          /* design-tool selection box that glides between letters */
+  position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 2;
+  box-sizing: border-box; border: 1px solid; border-color: color-mix(in srgb, currentColor 55%, transparent);
+  background:
+    linear-gradient(currentColor, currentColor) 0 0 / 5px 5px no-repeat,
+    linear-gradient(currentColor, currentColor) 100% 0 / 5px 5px no-repeat,
+    linear-gradient(currentColor, currentColor) 0 100% / 5px 5px no-repeat,
+    linear-gradient(currentColor, currentColor) 100% 100% / 5px 5px no-repeat;
+  opacity: 0; pointer-events: none;
+  transition: left 0.14s ease-out, top 0.14s ease-out, width 0.14s ease-out, height 0.14s ease-out, opacity 0.15s;
+}
+.glyph-frame__label { position: absolute; left: -1px; bottom: calc(100% + 6px); font: 600 11px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; letter-spacing: 0.05em; white-space: pre; opacity: 0.8; }
+
+/* ==========================================================================
+   12. CLICK RIPPLE (rings spread from the click point; script.js adds .ripple)
+   Change --ripple-radius to 0 for square rings.
+   ========================================================================== */
+.ripple { --ripple-radius: 50%; position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: 250; pointer-events: none; }
+.ripple i { position: absolute; left: 0; top: 0; width: 18rem; height: 18rem; border: 1.5px solid var(--ripple, var(--blue-tint)); border-radius: var(--ripple-radius); translate: -50% -50%; scale: 0; opacity: 0; animation: ripple 1.2s cubic-bezier(0.2, 0.6, 0.3, 1) forwards; }
+.ripple i:nth-child(2) { animation-delay: 0.14s; }
+.ripple i:nth-child(3) { animation-delay: 0.28s; }
+.ripple.is-light { --ripple: var(--blue-deep); }
+@keyframes ripple { from { scale: 0; opacity: 0.8; } to { scale: 1; opacity: 0; } }
+
+/* ==========================================================================
+   13. HERO TYPING INTRO
+   While <html> has the class "typing", only the headline shows and its letters
+   appear one by one (script.js). When it ends, the class is removed and the
+   rest of the hero fades in with the "rise" animation above.
+   ========================================================================== */
+.typing:not(.type-ready) .hero__title { visibility: hidden; }                 /* until script.js has split the letters */
+.typing .hero__title .ch:not(.is-typed) { visibility: hidden; }               /* hidden letters still keep their space */
+.typing .hero__hello, .typing .hero__pitch, .typing .hero__actions, .typing .hero__visual { visibility: hidden; animation: none; }
+.type-caret { position: relative; display: inline-block; width: 0; }
+.type-caret::after {                                                          /* blinking caret, sized from the text around it */
+  content: ""; position: absolute; left: 0.03em; bottom: -0.02em; width: 0.07em; height: 0.82em;
+  background: var(--blue-tint); animation: blink 0.9s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Respect reduced motion: stop the ambient spinning */
+@media (prefers-reduced-motion: reduce) {
+  .badge { animation: none; }
+  .btn, .sticker, .hero__photo::before, .card::before, .chip, .flip__inner { transition: none; }
+  .ticker__track { animation: none; flex-wrap: wrap; width: auto; }
+  .ticker__list[aria-hidden] { display: none; }
+  .js .reveal { opacity: 1; translate: none; transition: none; }
+  .js .hero__hello, .js .hero__title-role, .js .hero__title-focus, .js .hero__pitch, .js .hero__actions, .js .hero__visual { animation: none; }
+}
+
+/* ==========================================================================
+   14. MOVEMENT IN THE OTHER SECTIONS (the hero's playfulness, everywhere)
+   - Cards float a few pixels with the cursor (script.js sets --fx / --fy)
+   - Elements with data-drag can be dragged and spring back (About chips)
+   - Skills chips drift away from the cursor (script.js)
+   - Live Philippine-time clock in Availability
+   ========================================================================== */
+.card { transform: translate(var(--fx, 0px), var(--fy, 0px)); }
+
+.chips--big { position: relative; }
+.chips--big .chip[data-drag] { cursor: grab; touch-action: none; user-select: none; transition: translate 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.15s, color 0.15s, scale 0.15s, box-shadow 0.15s; }
+.chips--big .chip[data-drag]:hover { translate: none; }
+.chips--big .chip[data-drag].is-dragging { position: relative; z-index: 3; cursor: grabbing; scale: 1.08; box-shadow: 4px 4px 0 var(--blue-deep); transition: background-color 0.15s, color 0.15s, scale 0.15s, box-shadow 0.15s; }
+#skills .chips--big .chip { transition: transform 0.25s ease-out, translate 0.15s, scale 0.12s, background-color 0.15s, color 0.15s; }
+
+.clock { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem; margin: 0 0 1.75rem; font-weight: 600; color: var(--muted); }
+.clock[hidden] { display: none; }
+.clock strong { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 1.5rem + 2vw, 3rem); line-height: 1; color: var(--text); }
+.clock__dot { flex: none; width: 0.75rem; height: 0.75rem; border-radius: 50%; background: #8A90A0; }
+.clock.is-online .clock__dot { background: var(--blue-deep); animation: pulse 1.8s ease-out infinite; }
+@keyframes pulse { from { box-shadow: 0 0 0 0 rgba(26, 55, 184, 0.5); } to { box-shadow: 0 0 0 0.8rem rgba(26, 55, 184, 0); } }
+
+.contact .container { position: relative; }
+
+@media (prefers-reduced-motion: reduce) { .clock.is-online .clock__dot { animation: none; } }
+
+/* ==========================================================================
+   15. PROJECTS CAROUSEL (coverflow) + DETAILS WINDOW
+   script.js sets each slide's position, so adding a project needs no CSS.
+   Without JavaScript the cards simply stack and the details show under each one.
+   ========================================================================== */
+.carousel__track { counter-reset: project; display: grid; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+.slide { counter-increment: project; }
+.slide__card { width: 100%; height: 100%; min-height: 20rem; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.slide__card::after {                   /* auto number: 01, 02, 03 ... */
+  content: counter(project, decimal-leading-zero);
+  position: absolute; top: 0.9rem; right: 1.25rem;
+  font-family: var(--font-display); font-size: 3rem; line-height: 1;
+  color: transparent; -webkit-text-stroke: 1.5px var(--card-line);
+}
+.slide__title { display: block; margin-bottom: 0.75rem; padding-right: 3.75rem; font-family: var(--font-display); font-size: 1.9rem; line-height: 1.05; text-transform: uppercase; }
+.slide__summary { display: block; color: var(--muted); }
+.slide__hint { display: flex; align-items: center; margin-top: 1.25rem; font-size: 0.9rem; font-weight: 700; }
+.slide__hint::after { content: "+"; display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; margin-left: 0.6rem; border: 1.5px solid currentColor; line-height: 1; }
+.slide__details { margin-top: 1rem; }
+
+.js .carousel { overflow: hidden; }
+.js .carousel__track { display: block; position: relative; height: 24rem; perspective: 1400px; touch-action: pan-y; }   /* pan-y lets the page scroll up/down while sideways swipes reach script.js */
+.js .slide { position: absolute; top: 0; left: 50%; width: min(22rem, 72vw); height: 100%; transform: translateX(-50%); }
+.js .carousel.is-ready .slide { transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.6s, filter 0.6s; }
+.js .slide:not(.is-active) { filter: brightness(0.65); }
+.js .slide:not(.is-active) .slide__hint { visibility: hidden; }
+.js .slide__details { display: none; }
+
+.carousel__ui { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
+.carousel__ui .btn[disabled] { opacity: 0.35; cursor: default; box-shadow: none; transform: none; }
+.carousel__dots { display: flex; }
+.carousel__dot { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; background: none; cursor: pointer; }
+.carousel__dot::before { content: ""; width: 0.7rem; height: 0.7rem; border: 1.5px solid var(--text); }
+.carousel__dot[aria-current="true"]::before { background: var(--blue-tint); border-color: var(--blue-tint); }
+
+.project-dialog { width: min(44rem, 92vw); max-height: 88vh; padding: 0; overflow: auto; border: 1.5px solid var(--line-dark); background: var(--ink-raised); color: var(--text-on-dark); }
+.project-dialog::backdrop { background: rgba(11, 11, 13, 0.82); }
+.project-dialog[open] { animation: pop 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); }
+@keyframes pop { from { opacity: 0; translate: 0 18px; scale: 0.97; } }
+.project-dialog__inner { position: relative; padding: 2rem; }
+.project-dialog__close { position: absolute; top: 1rem; right: 1rem; }
+.project-dialog .card__title { padding-right: 6rem; font-size: 2.2rem; }
+@media (max-width: 36rem) {      /* phones: the Close button sits above the title so words are not squeezed */
+  .project-dialog__inner { padding: 1.25rem; }
+  .project-dialog .card__title { padding: 3.25rem 0 0; font-size: 2rem; }
+}
+.project-dialog figure { margin: 1.25rem 0 0; }
+.project-dialog img { display: block; width: 100%; height: auto; border: 1.5px solid var(--card-line); }
+.project-dialog figcaption { margin-top: 0.5rem; font-size: 0.875rem; color: var(--muted); }
+html:has(.project-dialog[open]) { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) { .js .carousel.is-ready .slide { transition: none; } .project-dialog[open] { animation: none; } }
+/* ==========================================================================
+   16. POLISH: scroll progress, section rule, idle float
+   ========================================================================== */
+.scroll-progress { position: absolute; left: 0; right: 0; top: calc(100% + 1px); height: 3px; background: var(--blue-royal-hover); transform: scaleX(var(--p, 0)); transform-origin: left; pointer-events: none; }
+
+/* Straight-line divider for same-colored neighbours: hairline + short blue block.
+   Add class "lane--rule" to the second section. */
+.lane--rule { --rule-block: var(--blue-deep); padding-top: 0; }
+.lane--dark.lane--rule { --rule-block: var(--blue-royal-hover); }
+.lane--rule > .container::before {
+  content: ""; display: block; height: 6px; margin-bottom: clamp(3rem, 7vw, 4.5rem);
+  background:
+    linear-gradient(var(--rule-block), var(--rule-block)) left center / 4rem 6px no-repeat,
+    linear-gradient(color-mix(in srgb, var(--text) 25%, transparent), color-mix(in srgb, var(--text) 25%, transparent)) left center / 100% 1px no-repeat;
+}
+
+/* Project cards: slow idle bob (translate only, so the cursor float and slide transform are untouched) */
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+.js .slide__card { animation: bob 5.5s ease-in-out infinite; }
+.js .slide:nth-child(3n + 2) .slide__card { animation-duration: 6.5s; animation-delay: -2.2s; }
+.js .slide:nth-child(3n) .slide__card { animation-duration: 6s; animation-delay: -4s; }
+@media (prefers-reduced-motion: reduce) { .js .slide__card { animation: none; } }
+
+/* ==========================================================================
+   17. REACTIVENESS: flip-card tilt + light, consistent hover/press, idle wobble
+   Hover = lift or highlight, press = sink (scale), focus = lane outline (section 2).
+   ========================================================================== */
+picture { display: contents; }
+
+/* Flip cards: tilt toward the cursor (script.js sets --tx / --ty / --sx / --sy on mouse devices) */
+.js .flip { transform: perspective(900px) rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)); transition: transform 0.25s ease-out, scale 0.15s; }
+.flip__front { position: relative; }
+.flip:active { scale: 0.98; }
+
+/* Same feedback on nav, links, dots, project cards and chips */
+.nav__brand { transition: color 0.15s; }
+.nav__brand:hover { color: var(--blue-tint); }
+.nav__toggle { transition: border-color 0.15s, scale 0.12s; }
+.nav__toggle:hover { border-color: var(--blue-tint); }
+.nav__toggle:active, .carousel__dot:active { scale: 0.92; }
+.links a { display: inline-flex; align-items: center; min-height: 2.75rem; transition: color 0.15s, translate 0.15s; }
+.links a:hover { translate: 0 -2px; }
+.links a:active { translate: 0 1px; }
+.carousel__dot::before { transition: background-color 0.15s, border-color 0.15s, scale 0.15s; }
+.carousel__dot:hover::before { scale: 1.3; border-color: var(--blue-tint); }
+.slide__card { transition: scale 0.15s; }
+.slide__card:active { scale: 0.98; }
+.chips--big .chip:not([data-drag]):active { scale: 0.96; }
+
+/* Gentle idle wobble for stickers and About chips (rotate only, so dragging is untouched) */
+@keyframes wobble { 0%, 100% { rotate: calc(var(--r, 0deg) - 1.2deg); } 50% { rotate: calc(var(--r, 0deg) + 1.2deg); } }
+.sticker, .chips--big .chip[data-drag] { animation: wobble 5.5s ease-in-out infinite; }
+.sticker:nth-of-type(2n), .chips--big .chip[data-drag]:nth-child(2n) { animation-duration: 6.5s; animation-delay: -2s; }
+.sticker:nth-of-type(3n), .chips--big .chip[data-drag]:nth-child(3n) { animation-duration: 6s; animation-delay: -4s; }
+.sticker:hover, .chips--big .chip[data-drag]:hover, .sticker.is-dragging, .chips--big .chip[data-drag].is-dragging { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .flip, .nav__brand, .nav__toggle, .links a, .carousel__dot::before, .slide__card { transition: none; }
+  .sticker, .chips--big .chip[data-drag] { animation: none; }
+}
+
+/* ==========================================================================
+   18. CONTACT GLOBE (canvas drawn by script.js). Text on the left, globe on the right from 64rem;
+   below the text on smaller screens. Without JavaScript the globe is hidden.
+   ========================================================================== */
+.contact__layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; align-items: center; }
+.globe { display: none; position: relative; width: min(100%, 24rem); aspect-ratio: 1; margin-inline: auto; }
+.js .globe { display: block; }
+.globe canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; touch-action: pan-y; }   /* pan-y: page still scrolls up/down */
+.globe canvas:active { cursor: grabbing; }
+@media (min-width: 48rem) { .globe { width: min(100%, 28rem); } }
+@media (min-width: 64rem) {
+  .contact__layout { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 3rem; }
+  .globe { width: 100%; max-width: 32rem; }
+}
+
+main:focus { outline: none; }   /* the skip link moves focus here; it is a target, not a control */
+
+/* ==========================================================================
+   19. TRUST CONTENT: How I work steps, project case write-up, contact line, footer
+   ========================================================================== */
+.subtitle { margin: 3.5rem 0 1.5rem; font-family: var(--font-display); font-weight: 400; font-size: clamp(1.8rem, 1.4rem + 2vw, 2.6rem); line-height: 1; text-transform: uppercase; }
+
+.steps { display: grid; gap: 2rem; margin: 0; padding: 0; list-style: none; }
+@media (min-width: 48rem) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.5rem; } }
+.step { position: relative; display: flex; flex-direction: column; gap: 0.5rem; padding-top: 1.25rem; border-top: 1px solid color-mix(in srgb, var(--text) 25%, transparent); }
+.step::before { content: ""; position: absolute; top: -3px; left: 0; width: 3rem; height: 5px; background: var(--spot); }   /* same blue block as the section rule */
+.step__num { font-family: var(--font-display); font-size: 3rem; line-height: 1; color: var(--spot); }
+.step__title { font-size: 1.15rem; line-height: 1.25; }
+.step__text { color: var(--muted); }
+
+/* Problem / Approach / Result inside a project's details window */
+.case { display: grid; gap: 1rem; margin: 1.5rem 0 0; }
+.case div { padding-top: 0.9rem; border-top: 1px solid color-mix(in srgb, var(--text) 18%, transparent); }
+.case dt { margin-bottom: 0.25rem; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--spot); }
+.case dd { margin: 0; color: var(--muted); }
+
+.contact__lead { max-width: 28ch; margin: 0 0 1.75rem; font-size: var(--text-lead); line-height: 1.4; color: var(--muted); }
+
+.site-footer__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 1rem; }
+.site-footer__top { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 2.75rem; color: var(--text-on-dark); font-weight: 700; text-underline-offset: 0.3em; transition: color 0.15s, translate 0.15s; }
+.site-footer__top:hover { color: var(--blue-tint); translate: 0 -2px; }
+.site-footer__top:active { translate: 0 1px; }
+
+/* ==========================================================================
+   20. SKILLS GROUPS (Tools / Working skills)
+   ========================================================================== */
+.skillgroup + .skillgroup { margin-top: 2.5rem; }
+.skillgroup__title { margin: 0 0 1rem; font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
