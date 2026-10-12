@@ -165,6 +165,9 @@
       const original = el.textContent.trim();
       let timer;
       el.setAttribute('aria-label', original);   // screen readers always hear the real text
+      el.textContent = original;                 // one text node; we only change its data, never replace it
+      const node = el.firstChild;                // (replacing it mid-click made Safari drop the first click)
+      const settle = () => { clearInterval(timer); node.data = original; el.style.width = ''; };
       const run = () => {
         clearInterval(timer);
         el.style.width = `${el.getBoundingClientRect().width}px`;  // lock the size so nothing around it jumps
@@ -181,10 +184,11 @@
             [pool[k], pool[r]] = [pool[r], pool[k]];
           }
           open.forEach((i, k) => { letters[i] = pool[k]; });
-          el.textContent = letters.join('');
-          if (frame >= total) { clearInterval(timer); el.textContent = original; el.style.width = ''; }
+          node.data = letters.join('');
+          if (frame >= total) settle();
         }, 35);
       };
+      el.addEventListener('pointerdown', settle);   // pressing a button always shows its real label at once
       el.addEventListener('pointerenter', run);
       el.addEventListener('focus', run);
     });
@@ -346,13 +350,18 @@
   if (clock) {
     const phTime = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Manila', hour: 'numeric', minute: '2-digit', hour12: true });
     const phHour = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Manila', hour: 'numeric', hour12: false });
+    const phDay = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Manila', weekday: 'short' });
     const localTime = new Intl.DateTimeFormat([], { hour: 'numeric', minute: '2-digit' });
+    const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const update = () => {
       const now = new Date();
       const hour = Number(phHour.format(now)) % 24;
-      const online = hour >= 15 || hour < 2;                 // 3 PM to 2 AM Philippine time
+      const day = DAYS.indexOf(phDay.format(now));          // 0 = Sunday, in Philippine time
+      const workDay = day >= 1 && day <= 5;                 // Monday to Friday
+      const lateDay = day >= 2 && day <= 6;                 // the 12 AM to 1 AM hour belongs to the evening before
+      const online = (hour >= 21 && workDay) || (hour < 1 && lateDay);   // 9 PM to 1 AM Philippine time
       document.getElementById('ph-time').textContent = phTime.format(now);
-      document.getElementById('ph-status').textContent = online ? 'Online now' : 'Offline, back at 3 PM';
+      document.getElementById('ph-status').textContent = online ? 'Online now' : (workDay && hour < 21 ? 'Offline, back at 9 PM' : 'Offline, back Monday at 9 PM');
       document.getElementById('local-time').textContent = localTime.format(now);
       clock.classList.toggle('is-online', online);
     };
