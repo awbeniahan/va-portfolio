@@ -210,7 +210,8 @@ img { max-width: 100%; height: auto; }
 }
 .nav__link:hover { color: var(--text-on-dark); background-size: 100% 2px; }
 
-@media (min-width: 56rem) {
+/* 72rem (not 56rem): the menu has six items now, so the one-row menu needs a wider screen */
+@media (min-width: 72rem) {
   .js .nav__toggle { display: none; }
 
   .nav__menu,
@@ -741,3 +742,72 @@ main:focus { outline: none; }   /* the skip link moves focus here; it is a targe
    ========================================================================== */
 .skillgroup + .skillgroup { margin-top: 2.5rem; }
 .skillgroup__title { margin: 0 0 1rem; font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
+
+/* ==========================================================================
+   17. ADMIN PROJECTS (light look) + SCREENSHOT VIEWER
+   The Admin carousel reuses every carousel / card / details rule above. This part only
+   fixes what was written for dark backgrounds, and adds the screenshot gallery and viewer.
+   ========================================================================== */
+
+/* Hidden until the Admin carousel has at least one project card */
+body:not(:has(#admin-projects .slide)) #admin-projects,
+body:not(:has(#admin-projects .slide)) li:has(> a[href="#admin-projects"]),
+body:not(:has(#admin-projects .slide)) .admin-link { display: none; }
+
+/* Plain text link (light and dark lanes) */
+.textlink { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--spot); font-weight: 700; text-underline-offset: 0.3em; }
+.textlink:hover { text-decoration-thickness: 2px; }
+
+/* Buttons on light: navy outline and shadow instead of white */
+.lane--light .btn--primary { box-shadow: 4px 4px 0 var(--text-on-light); }
+.lane--light .btn--primary:hover { box-shadow: 6px 6px 0 var(--text-on-light); }
+.lane--light .btn--outline { border-color: var(--text-on-light); color: var(--text-on-light); box-shadow: 4px 4px 0 var(--blue-royal); }
+.lane--light .btn--outline:hover { box-shadow: 6px 6px 0 var(--blue-royal); }
+.lane--light .btn:active { box-shadow: 0 0 0 transparent; }
+.lane--light .carousel__ui .btn[disabled] { box-shadow: none; }
+
+/* Carousel on light */
+.lane--light .slide:not(.is-active) { filter: brightness(0.94); }
+.lane--light .carousel__dot[aria-current="true"]::before { background: var(--blue-deep); border-color: var(--blue-deep); }
+.lane--light .carousel__dot:hover::before { border-color: var(--blue-deep); }
+.lane--light .slide__card { box-shadow: 0 1px 0 rgba(26, 31, 43, 0.04), 0 10px 24px -14px rgba(26, 31, 43, 0.35); }
+
+/* Details window on light */
+.lane--light .project-dialog { border-color: var(--card-line); background: #fff; color: var(--text); }
+.lane--light .project-dialog::backdrop { background: rgba(26, 31, 43, 0.7); }
+.case__list { margin: 0; padding-left: 1.2rem; }
+.case__list li + li { margin-top: 0.35rem; }
+.project-dialog .chips { margin-top: 1.25rem; }
+.demo-note { margin: 1.5rem 0 0; font-size: 0.875rem; font-style: italic; color: var(--muted); }
+
+/* Proof screenshots: thumbnails that open the viewer */
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 0.75rem; margin: 0.25rem 0 0; padding: 0; list-style: none; }
+.gallery__item { display: block; height: 100%; padding: 0.4rem 0.4rem 0.5rem; border: 1.5px solid var(--card-line); background: var(--card-bg); color: var(--text); text-decoration: none; transition: border-color 0.15s, translate 0.15s; }
+.gallery__item:hover { border-color: var(--spot); translate: 0 -2px; }
+.gallery__item:active { translate: 0 1px; }
+.gallery__item img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: top left; border: 1px solid var(--card-line); }
+.gallery__cap { display: block; margin-top: 0.4rem; font-size: 0.85rem; font-weight: 700; line-height: 1.3; }
+
+/* Viewer */
+.viewer { width: min(64rem, 94vw); max-height: 92vh; padding: 0; overflow: auto; border: 1.5px solid var(--card-line); background: #fff; color: var(--text); }
+.viewer::backdrop { background: rgba(26, 31, 43, 0.82); }
+.viewer[open] { animation: pop 0.25s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.viewer__inner { padding: 1rem; }
+.viewer__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem; margin-bottom: 0.75rem; }
+.viewer__count { margin: 0 auto 0 0; font-weight: 800; }
+.viewer__stage { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.75rem; }
+.viewer__fig { margin: 0; min-width: 0; }
+.viewer__img { display: block; width: 100%; height: auto; max-height: 68vh; object-fit: contain; border: 1.5px solid var(--card-line); background: var(--paper); touch-action: pan-y; }
+.viewer__cap { margin-top: 0.6rem; font-size: 0.95rem; color: var(--muted); }
+.viewer__nav { min-width: 2.75rem; padding-inline: 0.6rem; }
+.viewer__nav[disabled] { opacity: 0.35; cursor: default; box-shadow: none; transform: none; }
+@media (max-width: 36rem) {
+  .viewer__inner { padding: 0.75rem; }
+  .viewer__stage { grid-template-columns: minmax(0, 1fr) 1fr; row-gap: 0.75rem; }
+  .viewer__fig { grid-column: 1 / -1; grid-row: 1; }
+  .viewer__prev { grid-row: 2; justify-self: start; }
+  .viewer__next { grid-row: 2; justify-self: end; }
+}
+html:has(.viewer[open]) { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) { .viewer[open] { animation: none; } .gallery__item { transition: none; } }
+.viewer__nav[hidden] { display: none; }

@@ -5,8 +5,9 @@
    2. Mobile menu              5. Button text scramble on hover
    3. Draggable stickers       6. Click ripple             7. Nav underline that follows the section
    7b. Live Philippine-time clock (Availability)
-   7c. Projects carousel + details window
-   7d. Scroll-progress line
+   7c. Project carousels (Admin + Tech) + details windows
+   7d. Screenshot viewer (Proof screenshots)
+   7f. Scroll-progress line
    7e. Contact globe (canvas)
    8. Mouse-only: card light, soft glow, hero parallax, title letters (hover outline + drag)
    ========================================================================== */
@@ -217,7 +218,7 @@
     bar.setAttribute('aria-hidden', 'true');
     menu.prepend(bar);
     // Sections without their own nav link count under the nearest one
-    const group = { about: 'about', services: 'services', ai: 'services', projects: 'projects', skills: 'projects', availability: 'availability' };
+    const group = { about: 'about', services: 'services', ai: 'services', 'admin-projects': 'admin-projects', projects: 'projects', availability: 'availability' };
     let active = null;
     const place = () => {
       const link = navLinks.find((a) => a.getAttribute('href') === `#${active}`);
@@ -235,7 +236,7 @@
     const spy = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) { active = group[e.target.id] || null; place(); } });
     }, { rootMargin: '-45% 0px -54% 0px' });   // a thin band near the middle of the screen
-    ['top', 'about', 'services', 'ai', 'projects', 'skills', 'availability', 'contact']
+    ['top', 'about', 'services', 'ai', 'projects', 'admin-projects', 'skills', 'availability', 'contact']
       .map((id) => document.getElementById(id)).filter(Boolean).forEach((s) => spy.observe(s));
     addEventListener('resize', place);
     if (document.fonts) document.fonts.ready.then(place);
@@ -248,8 +249,9 @@
     const track = root.querySelector('.carousel__track');
     const slides = [...track.querySelectorAll('.slide')];
     if (!slides.length) return;
-    const dialog = document.getElementById('project-dialog');
-    const dialogBody = document.getElementById('project-dialog-body');
+    const dialog = document.getElementById(root.dataset.dialog || 'project-dialog');   // Admin carousel uses its own (light) window
+    const dialogBody = dialog && dialog.querySelector('.project-dialog__body');
+    let opener = null;
     let active = 0;
 
     // Controls (built here so adding a project never needs extra HTML)
@@ -313,6 +315,7 @@
     // Details window
     const openDetails = (slide) => {
       if (!dialog || !dialog.showModal) return;
+      opener = slide.querySelector('.slide__card');
       dialogBody.innerHTML = slide.querySelector('.slide__details').innerHTML;
       fixPictures(dialogBody);
       dialog.setAttribute('aria-label', slide.querySelector('.slide__title').textContent.trim());
@@ -325,6 +328,7 @@
     if (dialog) {
       dialog.querySelector('.project-dialog__close').addEventListener('click', () => dialog.close());
       dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });   // click outside closes
+      dialog.addEventListener('close', () => { if (opener) opener.focus({ preventScroll: true }); });   // Safari does not always restore focus itself
     }
 
     // Swipe or drag sideways to move
@@ -344,6 +348,71 @@
     layout();
     requestAnimationFrame(() => root.classList.add('is-ready'));   // animate only after the first layout
   });
+
+  /* ---------- 7d. Screenshot viewer ----------
+     Any <a class="gallery__item"> inside a project details window opens the shared #viewer.
+     Keys: left/right arrows move, Esc closes. Touch: swipe sideways. Without JavaScript the link just opens the image. */
+  const viewer = document.getElementById('viewer');
+  if (viewer && viewer.showModal) {
+    const vImg = viewer.querySelector('.viewer__img');
+    const vSrc = viewer.querySelector('.viewer__src');
+    const vCap = viewer.querySelector('.viewer__cap');
+    const vCount = viewer.querySelector('.viewer__count');
+    const vFull = viewer.querySelector('.viewer__full');
+    const vPrev = viewer.querySelector('.viewer__prev');
+    const vNext = viewer.querySelector('.viewer__next');
+    let shots = [], at = 0, trigger = null;
+
+    const show = (i) => {
+      at = Math.max(0, Math.min(shots.length - 1, i));
+      const a = shots[at];
+      const thumb = a.querySelector('img');
+      if (a.dataset.webp) vSrc.srcset = a.dataset.webp; else vSrc.removeAttribute('srcset');
+      vImg.src = a.href;
+      vImg.alt = thumb ? thumb.alt : '';
+      if (a.dataset.w && a.dataset.h) { vImg.width = a.dataset.w; vImg.height = a.dataset.h; }
+      vCap.textContent = a.dataset.caption || (thumb ? thumb.alt : '');
+      vCount.textContent = `Screenshot ${at + 1} of ${shots.length}`;
+      vFull.href = a.href;
+      vPrev.disabled = at === 0;
+      vNext.disabled = at === shots.length - 1;
+      vPrev.hidden = vNext.hidden = shots.length < 2;
+      [shots[at - 1], shots[at + 1]].forEach((n) => { if (n) new Image().src = n.href; });   // preload the neighbours
+      fixPictures(vImg.closest('picture'));
+    };
+
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('.gallery__item');
+      if (!a) return;
+      e.preventDefault();
+      trigger = a;
+      shots = [...a.closest('.gallery').querySelectorAll('.gallery__item')];
+      show(shots.indexOf(a));
+      viewer.showModal();
+      viewer.scrollTop = 0;
+    });
+    vPrev.addEventListener('click', () => show(at - 1));
+    vNext.addEventListener('click', () => show(at + 1));
+    viewer.querySelector('.viewer__close').addEventListener('click', () => viewer.close());
+    viewer.addEventListener('click', (e) => { if (e.target === viewer) viewer.close(); });
+    viewer.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(at - 1);
+      if (e.key === 'ArrowRight') show(at + 1);
+    });
+    viewer.addEventListener('close', () => { if (trigger) trigger.focus({ preventScroll: true }); });
+
+    // Swipe on touch screens
+    let sx = null;
+    const stage = viewer.querySelector('.viewer__stage');
+    stage.addEventListener('pointerdown', (e) => { if (e.pointerType === 'touch') sx = e.clientX; });
+    stage.addEventListener('pointerup', (e) => {
+      if (sx === null) return;
+      const dx = e.clientX - sx;
+      sx = null;
+      if (Math.abs(dx) > 50) show(at + (dx < 0 ? 1 : -1));
+    });
+    stage.addEventListener('pointercancel', () => { sx = null; });
+  }
 
   /* ---------- 7b. Live Philippine-time clock ---------- */
   const clock = document.getElementById('clock');
@@ -370,7 +439,7 @@
     setInterval(update, 15000);
   }
 
-  /* ---------- 7d. Scroll-progress line ---------- */
+  /* ---------- 7f. Scroll-progress line ---------- */
   const progress = document.querySelector('.scroll-progress');
   if (progress) {
     let queued = false;

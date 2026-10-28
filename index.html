@@ -63,7 +63,8 @@
       <ul class="nav__menu" id="nav-menu">
         <li><a class="nav__link" href="#about">About</a></li>
         <li><a class="nav__link" href="#services">Services</a></li>
-        <li><a class="nav__link" href="#projects">Projects</a></li>
+        <li><a class="nav__link" href="#projects">Tech Projects</a></li>
+        <li><a class="nav__link" href="#admin-projects">Admin Projects</a></li>
         <li><a class="nav__link" href="#availability">Availability</a></li>
         <li><a class="btn btn--primary btn--small" href="#contact" data-scramble>Contact</a></li>
       </ul>
@@ -155,6 +156,8 @@
               <figure><picture><source srcset="assets/typing-test.webp" type="image/webp"><img src="assets/typing-test.png" alt="Typing test result: 70 words per minute with 98% accuracy" width="1600" height="612" loading="lazy"></picture><figcaption>My typing test result.</figcaption></figure>
             </li>
           </ul>
+          <!-- Hidden automatically until the Admin Projects section has at least one project card -->
+          <p class="small reveal admin-link"><a class="textlink" href="#admin-projects">See admin projects</a></p>
         </div>
       </div>
 
@@ -196,15 +199,15 @@
       </div>
     </section>
 
-    <!-- ========== PROJECTS (dark): coverflow carousel ==========
+    <!-- ========== TECH PROJECTS (dark): coverflow carousel ==========
          ADD A NEW PROJECT: copy everything from "PROJECT START" to "PROJECT END" below and paste it
          right before </ul> (after the last PROJECT END). Edit the text, chips and links in both parts:
          the small card (what shows in the carousel) and the details (what opens when you click it).
          The dots, the numbers (01, 02...) and the arrows update by themselves. -->
     <section class="lane lane--dark has-dots" id="projects" data-glow aria-labelledby="projects-title">
       <div class="container">
-        <h2 class="title reveal" id="projects-title">Projects</h2>
-        <div class="carousel reveal" data-carousel role="region" aria-roledescription="carousel" aria-label="Project carousel">
+        <h2 class="title reveal" id="projects-title">Tech projects</h2>
+        <div class="carousel reveal" data-carousel role="region" aria-roledescription="carousel" aria-label="Tech project carousel">
           <ul class="carousel__track">
 
             <!-- PROJECT START -->
@@ -279,14 +282,283 @@
         <dialog class="project-dialog" id="project-dialog">
           <div class="project-dialog__inner">
             <button class="btn btn--primary btn--small project-dialog__close" type="button">Close</button>
-            <div id="project-dialog-body"></div>
+            <div class="project-dialog__body" id="project-dialog-body"></div>
+          </div>
+        </dialog>
+      </div>
+    </section>
+
+    <!-- ========== ADMIN PROJECTS (light): coverflow carousel ==========
+         Same carousel as Tech Projects, in the light (admin) look. The whole section, its nav link and the
+         "See admin projects" link stay hidden until at least one project card exists below.
+
+         ADD A PROJECT: copy the block between "PROJECT TEMPLATE START" and "PROJECT TEMPLATE END" (it is inside an
+         HTML comment), paste it right before </ul> (after the last PROJECT END), and fill it in. A ready Project 5 version is the first comment block.
+         Screenshots: save three files per image in assets/admin/ :
+           NAME.png (about 1600 px wide), NAME.webp (same size), NAME-thumb.webp (about 480 px wide).
+         The card numbers (01, 02...), dots and arrows update by themselves. -->
+    <section class="lane lane--light" id="admin-projects" aria-labelledby="admin-projects-title">
+      <div class="container">
+        <h2 class="title reveal" id="admin-projects-title">Admin projects</h2>
+        <p class="lead reveal">Practice projects built on fictional demo data.</p>
+        <div class="carousel reveal" data-carousel data-dialog="admin-dialog" role="region" aria-roledescription="carousel" aria-label="Admin project carousel">
+          <ul class="carousel__track">
+
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Real Estate Data Cleanup | Excel</span>
+                <span class="slide__summary">A messy 100-row lead list, cleaned up and summarized with a pivot table.</span>
+                <span class="chips"><span class="chip">Excel</span><span class="chip">Pivot table</span><span class="chip">Conditional formatting</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Real Estate Data Cleanup | Excel</h3>
+                <p class="card__text">A messy 100-row lead list, cleaned up and summarized with a pivot table.</p>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>A 100-row real estate lead list with duplicate records, inconsistent names and spacing, mixed date and phone formats, missing client emails, and typos.</dd></div>
+                  <div><dt>What I did</dt><dd><ul class="case__list"><li>Removed 10 duplicate records.</li><li>Fixed name capitalization and extra spaces with PROPER and TRIM.</li><li>Put dates in one format and phone numbers in one format.</li><li>Corrected typos in the City and Property Type columns.</li><li>Highlighted missing client emails in light red with conditional formatting.</li><li>Built a pivot table of total property value by property type.</li></ul></dd></div>
+                  <div><dt>Result</dt><dd>A clean, analysis-ready spreadsheet, with a pivot table that groups property value into four clean property types.</dd></div>
+                  <div><dt>Proof</dt><dd>
+                    <ul class="gallery" aria-label="Proof screenshots">
+                      <li><a class="gallery__item" href="assets/admin/p1-before.png" data-webp="assets/admin/p1-before.webp" data-w="1600" data-h="761" data-caption="Before: duplicate leads, odd capitalization and spacing, mixed date and phone formats, blank emails and typos.">
+                        <img src="assets/admin/p1-before-thumb.webp" alt="Messy real estate lead list before cleaning, with repeated lead IDs, odd capitalization and mixed date formats" width="480" height="228" loading="lazy">
+                        <span class="gallery__cap">Before</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p1-after.png" data-webp="assets/admin/p1-after.webp" data-w="1600" data-h="719" data-caption="After: duplicates removed, names and spacing fixed, one date format, typos corrected, missing emails highlighted.">
+                        <img src="assets/admin/p1-after-thumb.webp" alt="Cleaned lead list with proper-case names, one date format and missing client emails highlighted light red" width="480" height="216" loading="lazy">
+                        <span class="gallery__cap">After</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p1-pivot.png" data-webp="assets/admin/p1-pivot.webp" data-w="836" data-h="356" data-caption="Pivot table: total property value (Sum of Price) for each of four clean property types.">
+                        <img src="assets/admin/p1-pivot-thumb.webp" alt="Pivot table of total property value by property type: Commercial, Condo, House and Townhouse" width="480" height="204" loading="lazy">
+                        <span class="gallery__cap">Pivot table</span></a></li>
+                    </ul>
+                  </dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Excel</li><li class="chip">PROPER</li><li class="chip">TRIM</li><li class="chip">Conditional formatting</li><li class="chip">Pivot table</li></ul>
+                <p class="demo-note">Fictional demo data.</p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Inbox Organization | Gmail</span>
+                <span class="slide__summary">A fictional store owner’s inbox, sorted so only the urgent emails stay in view.</span>
+                <span class="chips"><span class="chip">Gmail</span><span class="chip">Labels</span><span class="chip">Filters</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Inbox Organization | Gmail</h3>
+                <p class="card__text">A fictional store owner’s inbox, sorted so only the urgent emails stay in view.</p>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>A fictional apparel store owner’s inbox, with urgent payment and supplier alerts buried among customer, order and marketing emails.</dd></div>
+                  <div><dt>What I did</dt><dd><ul class="case__list"><li>Loaded 27 fictional emails into a brand-new test Gmail account.</li><li>Created 5 color-coded labels: 01 Action Needed, Customer Support, Orders &amp; Fulfillment, Suppliers &amp; Vendors and Marketing &amp; Collabs.</li><li>Set up 3 keyword filters that label incoming mail. The urgent filter also stars it.</li><li>Used multi-label logic: a factory delay is both a supplier update and an urgent action.</li><li>Starred the 4 urgent emails and archived the other 23.</li></ul></dd></div>
+                  <div><dt>Result</dt><dd>Emails sorted into 5 color-coded labels, and the inbox now shows only the 4 that need action.</dd></div>
+                  <div><dt>Proof</dt><dd>
+                    <ul class="gallery" aria-label="Proof screenshots">
+                      <li><a class="gallery__item" href="assets/admin/p2-before.png" data-webp="assets/admin/p2-before.webp" data-w="1600" data-h="888" data-caption="Before: 27 unread emails, no labels.">
+                        <img src="assets/admin/p2-before-thumb.webp" alt="Gmail inbox before organizing, with 27 unread emails and no labels" width="480" height="266" loading="lazy">
+                        <span class="gallery__cap">Before</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p2-after-labeled.png" data-webp="assets/admin/p2-after-labeled.webp" data-w="1600" data-h="918" data-caption="After: emails carry color-coded labels, and the 4 urgent ones are starred.">
+                        <img src="assets/admin/p2-after-labeled-thumb.webp" alt="Gmail inbox after organizing, with color-coded labels on the emails and four starred" width="480" height="275" loading="lazy">
+                        <span class="gallery__cap">After: labeled</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p2-after-archived.png" data-webp="assets/admin/p2-after-archived.webp" data-w="1600" data-h="487" data-caption="After: the other 23 emails are archived, so the inbox shows only the 4 urgent ones.">
+                        <img src="assets/admin/p2-after-archived-thumb.webp" alt="Gmail inbox showing only the four starred urgent emails" width="480" height="146" loading="lazy">
+                        <span class="gallery__cap">After: inbox</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p2-filters.png" data-webp="assets/admin/p2-filters.webp" data-w="1600" data-h="373" data-caption="Three keyword filters: supplier words get Suppliers &amp; Vendors, marketing words get Marketing &amp; Collabs, and urgent words get a star and 01 Action Needed.">
+                        <img src="assets/admin/p2-filters-thumb.webp" alt="Gmail filter settings listing three keyword filters" width="480" height="112" loading="lazy">
+                        <span class="gallery__cap">Filters</span></a></li>
+                    </ul>
+                  </dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Gmail</li><li class="chip">Labels</li><li class="chip">Filters</li><li class="chip">Stars and archive</li></ul>
+                <p class="demo-note">Fictional demo data.</p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Executive Calendar &amp; Time-Zone Scheduling | Google Calendar</span>
+                <span class="slide__summary">A sample week for a founder working across New York, London, Sydney and the Philippines.</span>
+                <span class="chips"><span class="chip">Google Calendar</span><span class="chip">Time zones</span><span class="chip">Booking page</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Executive Calendar &amp; Time-Zone Scheduling | Google Calendar</h3>
+                <p class="card__text">A sample week for a founder working across New York, London, Sydney and the Philippines.</p>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>A founder in US Eastern time works with a London supplier, a Sydney agency and a Philippines-based VA, with no system for protecting focus time or finding workable meeting times.</dd></div>
+                  <div><dt>What I did</dt><dd><ul class="case__list"><li>Set up dual time columns: Eastern Time (ET) and Philippine time (PHT).</li><li>Color-coded five categories: deep work, external calls, VA syncs, buffers and personal time.</li><li>Placed London calls at 9:30 AM ET (2:30 PM in London) and Sydney calls at 4:30 PM ET (8:30 AM the next day in Sydney).</li><li>Added daily deep-work blocks, 15-minute buffers after external calls, and clock-change markers for the UK (Oct 25) and the US (Nov 1).</li><li>Built a 30-minute booking page, Monday to Friday 9:00 to 11:30 AM ET, that hides times that clash with existing events.</li></ul></dd></div>
+                  <div><dt>Result</dt><dd>A 20-event sample week and a booking page that automatically hides conflicting slots.</dd></div>
+                  <div><dt>Proof</dt><dd>
+                    <ul class="gallery" aria-label="Proof screenshots">
+                      <li><a class="gallery__item" href="assets/admin/p3-week.png" data-webp="assets/admin/p3-week.webp" data-w="1600" data-h="948" data-caption="Sample week, Nov 2 to 6, 2026, with ET and PHT time columns and color-coded categories.">
+                        <img src="assets/admin/p3-week-thumb.webp" alt="Google Calendar week of Nov 2 to 6, 2026, with ET and PHT time columns and color-coded events" width="480" height="284" loading="lazy">
+                        <span class="gallery__cap">Week view</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p3-booking.png" data-webp="assets/admin/p3-booking.webp" data-w="1600" data-h="547" data-caption="Public booking page: times that clash with calendar events are hidden. Times shown in Eastern Time.">
+                        <img src="assets/admin/p3-booking-thumb.webp" alt="Public booking page showing open 30-minute slots, with clashing times hidden" width="480" height="164" loading="lazy">
+                        <span class="gallery__cap">Booking page</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p3-settings.png" data-webp="assets/admin/p3-settings.webp" data-w="748" data-h="1656" data-caption="Booking settings: 30-minute slots, Mon to Fri 9:00 to 11:30 AM, Eastern Time (Google shows today’s offset), bookable up to 60 days ahead.">
+                        <img src="assets/admin/p3-settings-thumb.webp" alt="Booking page settings: 30-minute appointments, Monday to Friday 9:00 to 11:30 AM, Eastern Time" width="480" height="1063" loading="lazy">
+                        <span class="gallery__cap">Booking settings</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p3-uk-clocks.png" data-webp="assets/admin/p3-uk-clocks.webp" data-w="1600" data-h="1203" data-caption="Marker for Oct 25: London switches from BST to GMT, so the London to New York gap is 4 hours that week.">
+                        <img src="assets/admin/p3-uk-clocks-thumb.webp" alt="Calendar marker for the UK clock change on Oct 25, with a note about the London to New York time gap" width="480" height="361" loading="lazy">
+                        <span class="gallery__cap">UK clock change</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p3-us-clocks.png" data-webp="assets/admin/p3-us-clocks.webp" data-w="1600" data-h="1203" data-caption="Marker for Nov 1: New York switches back, so the gap returns to 5 hours and meeting times need a recheck.">
+                        <img src="assets/admin/p3-us-clocks-thumb.webp" alt="Calendar marker for the US clock change on Nov 1, with a note to recheck meeting times" width="480" height="361" loading="lazy">
+                        <span class="gallery__cap">US clock change</span></a></li>
+                    </ul>
+                  </dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Google Calendar</li><li class="chip">Time zones</li><li class="chip">Booking page</li><li class="chip">Buffers</li></ul>
+                <p class="demo-note">Fictional demo data.</p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Client Task Board &amp; Team Chat | Trello + Slack</span>
+                <span class="slide__summary">A task board and team chat for a fictional store owner, with urgent items easy to spot.</span>
+                <span class="chips"><span class="chip">Trello</span><span class="chip">Slack</span><span class="chip">Automation</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Client Task Board &amp; Team Chat | Trello + Slack</h3>
+                <p class="card__text">A task board and team chat for a fictional store owner, with urgent items easy to spot.</p>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>A fictional apparel store owner has urgent items (failed payments, a chargeback, a supplier delay) mixed in with routine customer, supplier and marketing tasks, with no clear view of what needs action first.</dd></div>
+                  <div><dt>What I did</dt><dd><ul class="case__list"><li>Built a Trello board with 4 lists (To Do, In Progress, Waiting on Others, Done) and 12 task cards drawn from a mock inbox.</li><li>Color-coded the cards with 5 labels: Urgent, Customer Support, Orders &amp; Fulfillment, Suppliers &amp; Vendors and Marketing &amp; Collabs. A supplier delay carries both Urgent and Suppliers &amp; Vendors.</li><li>Added due dates and step-by-step checklists to the 4 urgent cards.</li><li>Set up one Trello automation rule: when a card is moved to Done, it is marked complete.</li><li>Set up a Slack workspace with 4 channels (#urgent, #orders, #suppliers, #customer-support) and posted sample messages, with urgent updates in #urgent each linked to its Trello card.</li><li>Connected Trello to Slack so a shared card appears in the channel as a preview with its label, checklist progress and due date.</li><li>Scheduled a weekday Slack reminder at 10 PM (UTC+8) to check the Urgent cards.</li></ul></dd></div>
+                  <div><dt>Result</dt><dd>A 12-card board where filtering by Urgent shows only the 4 tasks that need action, and a Slack workspace where urgent updates link straight to their cards.</dd></div>
+                  <div><dt>Proof</dt><dd>
+                    <ul class="gallery" aria-label="Proof screenshots">
+                      <li><a class="gallery__item" href="assets/admin/p4-board.png" data-webp="assets/admin/p4-board.webp" data-w="1600" data-h="805" data-caption="Full board: 4 lists, 12 cards, 5 color labels, due dates and checklist progress.">
+                        <img src="assets/admin/p4-board-thumb.webp" alt="Trello board with four lists, To Do, In Progress, Waiting on Others and Done, holding 12 color-labeled cards" width="480" height="242" loading="lazy">
+                        <span class="gallery__cap">Full board</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p4-urgent-filter.png" data-webp="assets/admin/p4-urgent-filter.webp" data-w="1600" data-h="456" data-caption="Filtered by the Urgent label: only the 4 cards that need action show.">
+                        <img src="assets/admin/p4-urgent-filter-thumb.webp" alt="Trello board filtered to the four Urgent cards" width="480" height="137" loading="lazy">
+                        <span class="gallery__cap">Urgent filter</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p4-open-card.png" data-webp="assets/admin/p4-open-card.webp" data-w="1600" data-h="1057" data-caption="An urgent card: label, due date, description and a 4-step checklist (2 of 4 done).">
+                        <img src="assets/admin/p4-open-card-thumb.webp" alt="Open Trello card for a Stripe dispute with an Urgent label, a due date and a checklist at 50 percent" width="480" height="317" loading="lazy">
+                        <span class="gallery__cap">Urgent card</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p4-slack-channels.png" data-webp="assets/admin/p4-slack-channels.webp" data-w="662" data-h="794" data-caption="Slack workspace channels: #urgent, #orders, #suppliers, #customer-support, plus the default channel.">
+                        <img src="assets/admin/p4-slack-channels-thumb.webp" alt="Slack sidebar listing four channels plus the default channel" width="480" height="576" loading="lazy">
+                        <span class="gallery__cap">Slack channels</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p4-slack-urgent.png" data-webp="assets/admin/p4-slack-urgent.webp" data-w="1600" data-h="999" data-caption="#urgent: four updates, each linked to its Trello card, a card preview with label, checklist and due date, and the reminder confirmation.">
+                        <img src="assets/admin/p4-slack-urgent-thumb.webp" alt="Slack #urgent channel with four updates that link to Trello cards, a shared card preview and a reminder confirmation" width="480" height="300" loading="lazy">
+                        <span class="gallery__cap">#urgent channel</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p4-slack-reminder.png" data-webp="assets/admin/p4-slack-reminder.webp" data-w="1600" data-h="155" data-caption="Weekday reminder in #urgent at 10 PM (UTC+8): check the red Urgent cards.">
+                        <img src="assets/admin/p4-slack-reminder-thumb.webp" alt="Slackbot reminder list showing a weekday 10 PM reminder in #urgent" width="480" height="46" loading="lazy">
+                        <span class="gallery__cap">Reminder</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p4-automation-rule.png" data-webp="assets/admin/p4-automation-rule.webp" data-w="1600" data-h="336" data-caption="One automation rule: when a card is added to Done, it is marked complete.">
+                        <img src="assets/admin/p4-automation-rule-thumb.webp" alt="Trello automation rule that marks a card complete when it is added to Done" width="480" height="101" loading="lazy">
+                        <span class="gallery__cap">Automation rule</span></a></li>
+                    </ul>
+                  </dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Trello</li><li class="chip">Slack</li><li class="chip">Automation rule</li><li class="chip">Checklists</li><li class="chip">Labels</li></ul>
+                <p class="demo-note">Fictional demo data.</p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
+            <!--
+            PROJECT 5 TEMPLATE START: File Organizer | Python
+            Planned from the project brief. The Project 5 chat decides what is true: edit every line so it matches
+            the finished script and its screenshots, and fill the [FILL IN] parts with real counts.
+            To use it: delete this comment's opening and closing marks, and replace NAME with real file names.
+            Screenshot files go in assets/admin/ (NAME.png, NAME.webp, NAME-thumb.webp).
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">File Organizer | Python</span>
+                <span class="slide__summary">A Python script that sorts a messy folder by moving files, never deleting them.</span>
+                <span class="chips"><span class="chip">Python</span><span class="chip">Automation</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">File Organizer | Python</h3>
+                <p class="card__text">A Python script that sorts a messy folder by moving files, never deleting them.</p>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>[FILL IN: the messy folder problem, in your own words.]</dd></div>
+                  <div><dt>What I did</dt><dd><ul class="case__list">
+                    <li>Wrote a script that sorts files by [FILL IN: type, date or name pattern, whichever it really does].</li>
+                    <li>It only moves files and never deletes anything.</li>
+                    <li>Added a dry-run mode that shows what would move before anything changes.</li>
+                    <li>Added a log that lets a run be undone.</li>
+                    <li>Tested it on generated dummy files only.</li>
+                  </ul></dd></div>
+                  <div><dt>Result</dt><dd>[FILL IN: real numbers from the test run, for example how many files went into how many folders.]</dd></div>
+                  <div><dt>Proof</dt><dd>
+                    <ul class="gallery" aria-label="Proof screenshots">
+                      <li><a class="gallery__item" href="assets/admin/p5-before.png" data-webp="assets/admin/p5-before.webp" data-w="1600" data-h="900" data-caption="Before: the messy folder.">
+                        <img src="assets/admin/p5-before-thumb.webp" alt="[FILL IN: describe the messy folder]" width="480" height="270" loading="lazy">
+                        <span class="gallery__cap">Before</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p5-dry-run.png" data-webp="assets/admin/p5-dry-run.webp" data-w="1600" data-h="900" data-caption="Dry run: what the script would move.">
+                        <img src="assets/admin/p5-dry-run-thumb.webp" alt="[FILL IN: describe the dry-run output]" width="480" height="270" loading="lazy">
+                        <span class="gallery__cap">Dry run</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p5-after.png" data-webp="assets/admin/p5-after.webp" data-w="1600" data-h="900" data-caption="After: the sorted folders.">
+                        <img src="assets/admin/p5-after-thumb.webp" alt="[FILL IN: describe the sorted folders]" width="480" height="270" loading="lazy">
+                        <span class="gallery__cap">After</span></a></li>
+                    </ul>
+                  </dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Python</li><li class="chip">Automation</li></ul>
+                <p class="project__actions"><a class="btn btn--outline btn--small" href="https://github.com/awbeniahan/REPO-NAME" target="_blank" rel="noopener">View code</a></p>
+                <p class="demo-note">Fictional demo data.</p>
+              </div>
+            </li>
+            PROJECT 5 TEMPLATE END
+            -->
+
+            <!--
+            PROJECT TEMPLATE START (blank, for any new project)
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Project title | Tool</span>
+                <span class="slide__summary">One short line about what it is.</span>
+                <span class="chips"><span class="chip">Tool 1</span><span class="chip">Tool 2</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Project title | Tool</h3>
+                <p class="card__text">One short line about what it is.</p>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>Two sentences at most.</dd></div>
+                  <div><dt>What I did</dt><dd><ul class="case__list"><li>Step one.</li><li>Step two.</li></ul></dd></div>
+                  <div><dt>Result</dt><dd>Only counts and results the screenshots show.</dd></div>
+                  <div><dt>Proof</dt><dd>
+                    <ul class="gallery" aria-label="Proof screenshots">
+                      <li><a class="gallery__item" href="assets/admin/NAME.png" data-webp="assets/admin/NAME.webp" data-w="1600" data-h="900" data-caption="Longer caption shown in the large view.">
+                        <img src="assets/admin/NAME-thumb.webp" alt="What the screenshot shows" width="480" height="270" loading="lazy">
+                        <span class="gallery__cap">Short label</span></a></li>
+                    </ul>
+                  </dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Tool 1</li><li class="chip">Tool 2</li></ul>
+                <p class="demo-note">Fictional demo data.</p>
+              </div>
+            </li>
+            PROJECT TEMPLATE END
+            -->
+
+          </ul>
+        </div>
+
+        <!-- Details window (light). script.js copies the clicked project's details into it. -->
+        <dialog class="project-dialog" id="admin-dialog">
+          <div class="project-dialog__inner">
+            <button class="btn btn--primary btn--small project-dialog__close" type="button">Close</button>
+            <div class="project-dialog__body" id="admin-dialog-body"></div>
           </div>
         </dialog>
       </div>
     </section>
 
     <!-- ========== SKILLS & TOOLS (dark) ========== -->
-    <section class="lane lane--dark lane--rule" id="skills" aria-labelledby="skills-title">
+    <section class="lane lane--dark" id="skills" aria-labelledby="skills-title">
       <div class="container">
         <h2 class="title reveal" id="skills-title">Skills &amp; tools</h2>
         <div class="skillgroup reveal">
@@ -335,6 +607,26 @@
         <div class="globe reveal" aria-hidden="true"><canvas></canvas></div>
       </div>
     </section>
+
+    <!-- ========== SCREENSHOT VIEWER (shared by every project details window) ==========
+         script.js fills it when a screenshot in a project's Proof row is clicked. Light look, so it uses lane--light. -->
+    <dialog class="viewer lane--light" id="viewer" aria-label="Screenshot viewer">
+      <div class="viewer__inner">
+        <div class="viewer__bar">
+          <p class="viewer__count" aria-live="polite"></p>
+          <a class="viewer__full textlink" target="_blank" rel="noopener">Open full size</a>
+          <button class="btn btn--primary btn--small viewer__close" type="button" autofocus>Close</button>
+        </div>
+        <div class="viewer__stage">
+          <button class="btn btn--outline btn--small viewer__nav viewer__prev" type="button" aria-label="Previous screenshot">←</button>
+          <figure class="viewer__fig">
+            <picture><source class="viewer__src" type="image/webp"><img class="viewer__img" alt=""></picture>
+            <figcaption class="viewer__cap"></figcaption>
+          </figure>
+          <button class="btn btn--outline btn--small viewer__nav viewer__next" type="button" aria-label="Next screenshot">→</button>
+        </div>
+      </div>
+    </dialog>
 
   </main>
 
