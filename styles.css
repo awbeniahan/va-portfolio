@@ -778,6 +778,7 @@ body:not(:has(#admin-projects .slide)) .admin-link { display: none; }
 .case__list { margin: 0; padding-left: 1.2rem; }
 .case__list li + li { margin-top: 0.35rem; }
 .project-dialog .chips { margin-top: 1.25rem; }
+.gallery-note { margin: 0.9rem 0 0; font-size: 0.875rem; font-style: italic; color: var(--muted); }
 .demo-note { margin: 1.5rem 0 0; font-size: 0.875rem; font-style: italic; color: var(--muted); }
 
 /* Proof screenshots: thumbnails that open the viewer */

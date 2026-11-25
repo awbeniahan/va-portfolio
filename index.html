@@ -465,6 +465,57 @@
             </li>
             <!-- PROJECT END -->
 
+            <!-- PROJECT START -->
+            <li class="slide">
+              <button class="card slide__card" type="button" aria-haspopup="dialog">
+                <span class="slide__title">Wholesale Inquiry Automation | Zapier</span>
+                <span class="slide__summary">A form that logs every wholesale inquiry, alerts the team in Slack and sends an automatic reply.</span>
+                <span class="chips"><span class="chip">Zapier</span><span class="chip">Google Forms</span><span class="chip">Google Sheets</span><span class="chip">Slack</span><span class="chip">Gmail</span></span>
+                <span class="slide__hint">Open details</span>
+              </button>
+              <div class="slide__details">
+                <h3 class="card__title">Wholesale Inquiry Automation | Zapier</h3>
+                <p class="card__text">A form that logs every wholesale inquiry, alerts the team in Slack and sends an automatic reply.</p>
+                <dl class="case">
+                  <div><dt>Problem</dt><dd>A fictional apparel store got wholesale requests by scattered email, so they were slow to log and easy to miss.</dd></div>
+                  <div><dt>What I did</dt><dd><ul class="case__list"><li>Built an 8-field Google Form that feeds a Google Sheet.</li><li>Set up a Zap that posts a formatted alert to a Slack channel for each new inquiry.</li><li>Set up a second Zap that emails the sender a confirmation using their own details.</li><li>Tested with 5 fictional submissions and checked every row, alert and email.</li></ul></dd></div>
+                  <div><dt>Result</dt><dd>Each submission is logged in Google Sheets, announced in #wholesale-inquiries on Slack, and answered automatically via Gmail, with 6 successful runs for the Slack Zap and 5 for the Gmail Zap (11 tasks total).</dd></div>
+                  <div><dt>Proof</dt><dd>
+                    <ul class="gallery" aria-label="Proof screenshots">
+                      <li><a class="gallery__item" href="assets/admin/p6-form.png" data-webp="assets/admin/p6-form.webp" data-w="1600" data-h="1230" data-caption="The 8-field wholesale inquiry form (editor view, top of form).">
+                        <img src="assets/admin/p6-form-thumb.webp" alt="Google Form editor showing the first five fields of the wholesale inquiry form" width="480" height="369" loading="lazy">
+                        <span class="gallery__cap">Form</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p6-sheet.png" data-webp="assets/admin/p6-sheet.webp" data-w="1600" data-h="414" data-caption="Every submission logged in Google Sheets: 5 fictional inquiries, one column per form field.">
+                        <img src="assets/admin/p6-sheet-thumb.webp" alt="Google Sheet with a timestamp column and one column for each of the eight form fields, holding five fictional inquiries" width="480" height="124" loading="lazy">
+                        <span class="gallery__cap">Sheet</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p6-zap-slack.png" data-webp="assets/admin/p6-zap-slack.webp" data-w="1600" data-h="677" data-caption="Zap 1: new sheet row, then a message in the Slack channel.">
+                        <img src="assets/admin/p6-zap-slack-thumb.webp" alt="Zapier editor showing Zap 1, a new Google Sheets row followed by a Slack channel message" width="480" height="203" loading="lazy">
+                        <span class="gallery__cap">Slack Zap</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p6-slack-alert.png" data-webp="assets/admin/p6-slack-alert.webp" data-w="1600" data-h="350" data-caption="Formatted alert posted to #wholesale-inquiries (from the first live test).">
+                        <img src="assets/admin/p6-slack-alert-thumb.webp" alt="Slack message in the wholesale-inquiries channel summarizing a test inquiry" width="480" height="105" loading="lazy">
+                        <span class="gallery__cap">Slack alert</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p6-zap-gmail.png" data-webp="assets/admin/p6-zap-gmail.webp" data-w="1600" data-h="1103" data-caption="Zap 2: new sheet row, then a Gmail email.">
+                        <img src="assets/admin/p6-zap-gmail-thumb.webp" alt="Zapier editor showing Zap 2, a new Google Sheets row followed by a Gmail send email step" width="480" height="331" loading="lazy">
+                        <span class="gallery__cap">Gmail Zap</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p6-autoreply.png" data-webp="assets/admin/p6-autoreply.webp" data-w="1600" data-h="491" data-caption="Personalized confirmation email sent by Zap 2 (from the first live test).">
+                        <img src="assets/admin/p6-autoreply-thumb.webp" alt="Confirmation email sent automatically to a test inquirer, using the details they submitted" width="480" height="147" loading="lazy">
+                        <span class="gallery__cap">Auto-reply</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p6-zap-history.png" data-webp="assets/admin/p6-zap-history.webp" data-w="1600" data-h="1131" data-caption="Zap History: successful runs, 1 task each (the 4 most recent runs).">
+                        <img src="assets/admin/p6-zap-history-thumb.webp" alt="Zapier Zap History list showing successful runs that used one task each" width="480" height="339" loading="lazy">
+                        <span class="gallery__cap">Zap history</span></a></li>
+                      <li><a class="gallery__item" href="assets/admin/p6-zaps-dashboard.png" data-webp="assets/admin/p6-zaps-dashboard.webp" data-w="1600" data-h="1395" data-caption="Task usage: 2 Zaps ran, 11 billable tasks (6 for Slack, 5 for Gmail).">
+                        <img src="assets/admin/p6-zaps-dashboard-thumb.webp" alt="Zapier dashboard showing two Zaps that ran and 11 billable tasks used" width="480" height="418" loading="lazy">
+                        <span class="gallery__cap">Task usage</span></a></li>
+                    </ul>
+                    <p class="gallery-note">Slack and email screenshots are from the first live test run; the sheet, run history and task usage show the final 5-inquiry batch.</p>
+                  </dd></div>
+                </dl>
+                <ul class="chips"><li class="chip">Zapier</li><li class="chip">Google Forms</li><li class="chip">Google Sheets</li><li class="chip">Slack</li><li class="chip">Gmail</li></ul>
+                <p class="demo-note">Fictional demo data.</p>
+              </div>
+            </li>
+            <!-- PROJECT END -->
+
             <!--
             PROJECT 5 TEMPLATE START: File Organizer | Python
             Planned from the project brief. The Project 5 chat decides what is true: edit every line so it matches
